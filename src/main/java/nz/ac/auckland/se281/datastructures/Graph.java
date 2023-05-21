@@ -1,20 +1,44 @@
 package nz.ac.auckland.se281.datastructures;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 /**
  * A graph that is composed of a set of verticies and edges.
  *
- * <p>You must NOT change the signature of the existing methods or constructor of this class.
+ * <p>
+ * You must NOT change the signature of the existing methods or constructor of
+ * this class.
  *
  * @param <T> The type of each vertex, that have a total ordering.
  */
 public class Graph<T extends Comparable<T>> {
-  public Graph(Set<T> verticies, Set<Edge<T>> edges) {}
+
+  // Instance variables
+  HashSet<T> verticies;
+  HashSet<Edge<T>> edges;
+
+  public Graph(Set<T> verticies, Set<Edge<T>> edges) {
+
+    // Add all verticies and edges to instance variables
+    this.verticies = new HashSet<T>();
+    for (T vertex : verticies) {
+      this.verticies.add(vertex);
+    }
+
+    this.edges = new HashSet<Edge<T>>();
+    for (Edge<T> edge : edges) {
+      this.edges.add(edge);
+    }
+
+  }
 
   public Set<T> getRoots() {
     // TODO: Task 1.
+    for (T vertex : verticies) {
+
+    }
     throw new UnsupportedOperationException();
   }
 
