@@ -16,8 +16,8 @@ import java.util.Set;
 public class Graph<T extends Comparable<T>> {
 
   // Instance variables
-  HashSet<T> verticies;
-  HashSet<Edge<T>> edges;
+  Set<T> verticies;
+  Set<Edge<T>> edges;
 
   public Graph(Set<T> verticies, Set<Edge<T>> edges) {
 
@@ -36,10 +36,32 @@ public class Graph<T extends Comparable<T>> {
 
   public Set<T> getRoots() {
     // TODO: Task 1.
-    for (T vertex : verticies) {
 
+    Set<T> roots = new HashSet<T>();
+
+    // Iterate through all verticies and check if they are a root
+    for (T vertex : verticies) {
+      if (isRoot(vertex)) {
+        roots.add(vertex);
+      }
     }
-    throw new UnsupportedOperationException();
+
+    return roots;
+    // throw new UnsupportedOperationException();
+
+  }
+
+  // Helper method to check if a vertex is a root
+  private boolean isRoot(T vertex) {
+
+    // Check if vertice is a destination of any edge
+    for (Edge<T> edge : edges) {
+      if ((edge.getDestination().equals(vertex))) {
+        return false;
+      }
+    }
+
+    return true;
   }
 
   public boolean isReflexive() {

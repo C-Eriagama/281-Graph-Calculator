@@ -18,4 +18,12 @@ public class Edge<T> {
     this.source = source;
     this.destination = destination;
   }
+
+  public T getSource() {
+    return source;
+  }
+
+  public T getDestination() {
+    return destination;
+  }
 }
