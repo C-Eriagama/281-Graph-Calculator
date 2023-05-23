@@ -7,9 +7,7 @@ import java.util.Set;
 /**
  * A graph that is composed of a set of verticies and edges.
  *
- * <p>
- * You must NOT change the signature of the existing methods or constructor of
- * this class.
+ * <p>You must NOT change the signature of the existing methods or constructor of this class.
  *
  * @param <T> The type of each vertex, that have a total ordering.
  */
@@ -31,7 +29,6 @@ public class Graph<T extends Comparable<T>> {
     for (Edge<T> edge : edges) {
       this.edges.add(edge);
     }
-
   }
 
   public Set<T> getRoots() {
@@ -47,8 +44,6 @@ public class Graph<T extends Comparable<T>> {
     }
 
     return roots;
-    // throw new UnsupportedOperationException();
-
   }
 
   // Helper method to check if a vertex is a root
@@ -61,12 +56,26 @@ public class Graph<T extends Comparable<T>> {
       }
     }
 
+    // TODO: Need to add lowest value of equivalence class to roots
+
     return true;
   }
 
   public boolean isReflexive() {
-    // TODO: Task 1.
-    throw new UnsupportedOperationException();
+
+    // Count the number of edges that have the same source and destination
+    int count = 0;
+    for (Edge edge : edges) {
+      if (edge.getSource().equals(edge.getDestination())) {
+        count++;
+      }
+    }
+
+    // If the number of self edges is equal to the number of verticies, then the graph is reflexive
+    if (count == verticies.size()) {
+      return true;
+    }
+    return false;
   }
 
   public boolean isSymmetric() {
