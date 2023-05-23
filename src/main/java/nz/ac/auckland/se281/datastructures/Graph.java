@@ -21,18 +21,13 @@ public class Graph<T extends Comparable<T>> {
 
     // Add all verticies and edges to instance variables
     this.verticies = new HashSet<T>();
-    for (T vertex : verticies) {
-      this.verticies.add(vertex);
-    }
+    this.verticies.addAll(verticies);
 
     this.edges = new HashSet<Edge<T>>();
-    for (Edge<T> edge : edges) {
-      this.edges.add(edge);
-    }
+    this.edges.addAll(edges);
   }
 
   public Set<T> getRoots() {
-    // TODO: Task 1.
 
     Set<T> roots = new HashSet<T>();
 
@@ -65,7 +60,7 @@ public class Graph<T extends Comparable<T>> {
 
     // Count the number of edges that have the same source and destination
     int count = 0;
-    for (Edge edge : edges) {
+    for (Edge<T> edge : edges) {
       if (edge.getSource().equals(edge.getDestination())) {
         count++;
       }
@@ -80,7 +75,22 @@ public class Graph<T extends Comparable<T>> {
 
   public boolean isSymmetric() {
     // TODO: Task 1.
-    throw new UnsupportedOperationException();
+    for (Edge<T> edge : edges) {
+      if ((edge.getSource() != edge.getDestination()) && !containsSymmetricEdge(edge)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private boolean containsSymmetricEdge(Edge<T> edge) {
+    for (Edge<T> e : edges) {
+      if (edge.getSource().equals(e.getDestination())
+          && edge.getDestination().equals(e.getSource())) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public boolean isTransitive() {
