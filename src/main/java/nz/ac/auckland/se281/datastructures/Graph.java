@@ -98,13 +98,27 @@ public class Graph<T extends Comparable<T>> {
 
   public boolean isTransitive() {
     // TODO: Task 1.
+
+    // Check all vertices
     for (T vertex : verticies) {
       Set<T> adjacentVertices = findDestinationVertices(vertex);
-    }
 
-    throw new UnsupportedOperationException();
+      // Check if a vertex is adjacent to every vertex an adjacent vertex is adjacent to
+      for (T adjacentVertex : adjacentVertices) {
+        Set<T> adjacentAdjacentVertices = findDestinationVertices(adjacentVertex);
+
+        // Check if A->B and B->C, then A->C
+        for (T adjacentAdjacentVertex : adjacentAdjacentVertices) {
+          if (!adjacentVertices.contains(adjacentAdjacentVertex)) {
+            return false;
+          }
+        }
+      }
+    }
+    return true;
   }
 
+  // Helper method to find all vertices that a vertex is adjacent to
   private Set<T> findDestinationVertices(Object vertex) {
     Set<T> adjacentVertices = new HashSet<T>();
     for (Edge<T> edge : edges) {
