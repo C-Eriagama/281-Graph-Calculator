@@ -97,7 +97,6 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public boolean isTransitive() {
-    // TODO: Task 1.
 
     // Check all vertices
     for (T vertex : verticies) {
@@ -130,8 +129,8 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public boolean isAntiSymmetric() {
-    // TODO: Task 1.
 
+    // Graph antisymmetric if there is a symmetrical edge that is not a self loop
     for (Edge<T> edge : edges) {
       if (isSymmetricEdge(edge) && edge.getSource() != edge.getDestination()) {
         return false;
@@ -141,8 +140,12 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public boolean isEquivalence() {
-    // TODO: Task 1.
-    throw new UnsupportedOperationException();
+
+    // Graph is an equivalence relation if it is reflexive, symmetric and transitive
+    if (isReflexive() && isSymmetric() && isTransitive()) {
+      return true;
+    }
+    return false;
   }
 
   public Set<T> getEquivalenceClass(T vertex) {
