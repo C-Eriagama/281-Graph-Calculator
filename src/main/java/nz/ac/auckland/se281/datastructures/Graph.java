@@ -83,7 +83,10 @@ public class Graph<T extends Comparable<T>> {
     return true;
   }
 
+  // Helper method to check if an edge has a symmetric edge
   private boolean containsSymmetricEdge(Edge<T> edge) {
+
+    // Check if there is an edge with the same source and destination but in the opposite direction
     for (Edge<T> e : edges) {
       if (edge.getSource().equals(e.getDestination())
           && edge.getDestination().equals(e.getSource())) {
@@ -95,7 +98,21 @@ public class Graph<T extends Comparable<T>> {
 
   public boolean isTransitive() {
     // TODO: Task 1.
+    for (T vertex : verticies) {
+      Set<T> adjacentVertices = findDestinationVertices(vertex);
+    }
+
     throw new UnsupportedOperationException();
+  }
+
+  private Set<T> findDestinationVertices(Object vertex) {
+    Set<T> adjacentVertices = new HashSet<T>();
+    for (Edge<T> edge : edges) {
+      if (edge.getSource().equals(vertex)) {
+        adjacentVertices.add(edge.getDestination());
+      }
+    }
+    return adjacentVertices;
   }
 
   public boolean isAntiSymmetric() {
