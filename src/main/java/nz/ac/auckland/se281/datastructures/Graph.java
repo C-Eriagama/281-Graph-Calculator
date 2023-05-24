@@ -17,6 +17,8 @@ public class Graph<T extends Comparable<T>> {
   Set<T> verticies;
   Set<Edge<T>> edges;
 
+  // Set<Set<T>> allEquivalenceClasses;
+
   public Graph(Set<T> verticies, Set<Edge<T>> edges) {
 
     // Add all verticies and edges to instance variables
@@ -25,6 +27,9 @@ public class Graph<T extends Comparable<T>> {
 
     this.edges = new HashSet<Edge<T>>();
     this.edges.addAll(edges);
+
+    // allEquivalenceClasses = new HashSet<Set<T>>();
+    // allEquivalenceClasses = getAllEquivalenceClasses();
   }
 
   public Set<T> getRoots() {
@@ -37,6 +42,15 @@ public class Graph<T extends Comparable<T>> {
         roots.add(vertex);
       }
     }
+
+    // Add all lowest values of equivalence classes to roots
+    // Set<Set<T>> allEquivalenceClasses = getAllEquivalenceClasses();
+
+    /* for (Set<T> equivalenceClass : allEquivalenceClasses) {
+      if (equivalenceClass.size() > 1) {
+        roots.add(Collections.min(equivalenceClass));
+      }
+    } */
 
     return roots;
   }
@@ -149,7 +163,6 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public Set<T> getEquivalenceClass(T vertex) {
-    // TODO: Task 1.
 
     Set<T> equivalenceClass = findDestinationVertices(vertex);
 
@@ -159,6 +172,20 @@ public class Graph<T extends Comparable<T>> {
     }
 
     return equivalenceClass;
+  }
+
+  // Helper method to find all equivalence classes
+  private Set<Set<T>> getAllEquivalenceClasses() {
+
+    Set<T> verticiesToAdd = verticies;
+    Set<Set<T>> allEquivalenceClasses = new HashSet<Set<T>>();
+
+    for (T vertex : verticiesToAdd) {
+      Set<T> equivalenceClass = getEquivalenceClass(vertex);
+      verticiesToAdd.removeAll(equivalenceClass);
+      allEquivalenceClasses.add(equivalenceClass);
+    }
+    return allEquivalenceClasses;
   }
 
   public List<T> iterativeBreadthFirstSearch() {
