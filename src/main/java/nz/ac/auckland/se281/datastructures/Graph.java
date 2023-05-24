@@ -76,7 +76,7 @@ public class Graph<T extends Comparable<T>> {
   public boolean isSymmetric() {
     // TODO: Task 1.
     for (Edge<T> edge : edges) {
-      if ((edge.getSource() != edge.getDestination()) && !containsSymmetricEdge(edge)) {
+      if (!isSymmetricEdge(edge)) {
         return false;
       }
     }
@@ -84,7 +84,7 @@ public class Graph<T extends Comparable<T>> {
   }
 
   // Helper method to check if an edge has a symmetric edge
-  private boolean containsSymmetricEdge(Edge<T> edge) {
+  private boolean isSymmetricEdge(Edge<T> edge) {
 
     // Check if there is an edge with the same source and destination but in the opposite direction
     for (Edge<T> e : edges) {
@@ -131,7 +131,13 @@ public class Graph<T extends Comparable<T>> {
 
   public boolean isAntiSymmetric() {
     // TODO: Task 1.
-    throw new UnsupportedOperationException();
+
+    for (Edge<T> edge : edges) {
+      if (isSymmetricEdge(edge) && edge.getSource() != edge.getDestination()) {
+        return false;
+      }
+    }
+    return true;
   }
 
   public boolean isEquivalence() {
