@@ -83,7 +83,7 @@ public class Graph<T extends Comparable<T>> {
     return true;
   }
 
-  // Helper method to check if an edge has a symmetric edge
+  // Helper method to check if an edge has a symmetric edge - including self loop
   private boolean isSymmetricEdge(Edge<T> edge) {
 
     // Check if there is an edge with the same source and destination but in the opposite direction
@@ -98,15 +98,15 @@ public class Graph<T extends Comparable<T>> {
 
   public boolean isTransitive() {
 
-    // Check all vertices
+    // Find all B such that A->B - for each vertex A
     for (T vertex : verticies) {
       Set<T> adjacentVertices = findDestinationVertices(vertex);
 
-      // Check if a vertex is adjacent to every vertex an adjacent vertex is adjacent to
+      // Find all C such that B->C - for each vertex B
       for (T adjacentVertex : adjacentVertices) {
         Set<T> adjacentAdjacentVertices = findDestinationVertices(adjacentVertex);
 
-        // Check if A->B and B->C, then A->C
+        // Check if A->B and B->C, then A->C - for each vertex C
         for (T adjacentAdjacentVertex : adjacentAdjacentVertices) {
           if (!adjacentVertices.contains(adjacentAdjacentVertex)) {
             return false;
@@ -117,8 +117,8 @@ public class Graph<T extends Comparable<T>> {
     return true;
   }
 
-  // Helper method to find all vertices that a vertex is adjacent to
-  private Set<T> findDestinationVertices(Object vertex) {
+  // Helper method to find all vertices that a vertex has an edge to
+  private Set<T> findDestinationVertices(T vertex) {
     Set<T> adjacentVertices = new HashSet<T>();
     for (Edge<T> edge : edges) {
       if (edge.getSource().equals(vertex)) {
@@ -150,7 +150,15 @@ public class Graph<T extends Comparable<T>> {
 
   public Set<T> getEquivalenceClass(T vertex) {
     // TODO: Task 1.
-    throw new UnsupportedOperationException();
+
+    Set<T> equivalenceClass = findDestinationVertices(vertex);
+
+    // Check if graph is an equivalence relation
+    if (!isEquivalence()) {
+      return verticies;
+    }
+
+    return equivalenceClass;
   }
 
   public List<T> iterativeBreadthFirstSearch() {
