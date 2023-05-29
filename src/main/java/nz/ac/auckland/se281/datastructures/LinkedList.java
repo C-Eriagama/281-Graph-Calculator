@@ -16,7 +16,7 @@ public class LinkedList<T> {
   }
 
   // Add node at end of list
-  public void add(T data, End end) {
+  private void add(T data, End end) {
     Node<T> node = new Node<T>(data);
 
     // If list is empty, set head and tail to node
@@ -31,12 +31,14 @@ public class LinkedList<T> {
       tail.setNext(node);
       node.setPrevious(tail);
       tail = node;
+      tail.setNext(null);
 
       // Add node to start of list
     } else if (end == End.PREPEND) {
       head.setPrevious(node);
       node.setNext(head);
       head = node;
+      head.setPrevious(null);
     }
   }
 
@@ -71,6 +73,17 @@ public class LinkedList<T> {
     Node<T> node = locateNode(index);
 
     Node<T> newNode = new Node<T>(data);
+
+    // If inserting at end or start, use append or prepend
+    if (index == size()) {
+      append(data);
+      return;
+    }
+
+    if (index == 0) {
+      prepend(data);
+      return;
+    }
 
     // Overwrite next and previous of node and new node
     newNode.setNext(node);

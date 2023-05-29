@@ -1,5 +1,6 @@
 package nz.ac.auckland.se281.datastructures;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ public class Graph<T extends Comparable<T>> {
     this.edges.addAll(edges);
 
     // Create adjacency list
+    adjacencyMap = new HashMap<T, LinkedList<Edge<T>>>();
     createAdjacencyMap();
 
     // allEquivalenceClasses = new HashSet<Set<T>>();
@@ -55,18 +57,21 @@ public class Graph<T extends Comparable<T>> {
 
           // Insert edge into list in order
           Node<Edge<T>> previous = adjacecentVertices.getHead();
-          while (previous.getNext() != null) {
+          do {
             T previousEdgeDestination = previous.getData().getDestination();
 
             // If edge is greater than previous edge, continue
             if (previousEdgeDestination.compareTo(edge.getDestination()) < 0) {
+              previous = previous.getNext();
               continue;
             }
 
             // If edge is less than previous edge, insert edge before previous edge
             int index = adjacecentVertices.indexOf(previous.getData());
             adjacecentVertices.insert(index, edge);
-          }
+
+            previous = previous.getNext();
+          } while (previous.getNext() != null);
         }
       }
 
@@ -214,18 +219,18 @@ public class Graph<T extends Comparable<T>> {
   }
 
   // Helper method to find all equivalence classes
-  private Set<Set<T>> getAllEquivalenceClasses() {
+  // private Set<Set<T>> getAllEquivalenceClasses() {
 
-    Set<T> verticiesToAdd = verticies;
-    Set<Set<T>> allEquivalenceClasses = new HashSet<Set<T>>();
+  //   Set<T> verticiesToAdd = verticies;
+  //   Set<Set<T>> allEquivalenceClasses = new HashSet<Set<T>>();
 
-    for (T vertex : verticiesToAdd) {
-      Set<T> equivalenceClass = getEquivalenceClass(vertex);
-      verticiesToAdd.removeAll(equivalenceClass);
-      allEquivalenceClasses.add(equivalenceClass);
-    }
-    return allEquivalenceClasses;
-  }
+  //   for (T vertex : verticiesToAdd) {
+  //     Set<T> equivalenceClass = getEquivalenceClass(vertex);
+  //     verticiesToAdd.removeAll(equivalenceClass);
+  //     allEquivalenceClasses.add(equivalenceClass);
+  //   }
+  //   return allEquivalenceClasses;
+  // }
 
   public List<T> iterativeBreadthFirstSearch() {
     // TODO: Task 2.
