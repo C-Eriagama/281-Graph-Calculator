@@ -1,25 +1,24 @@
-import java.util.LinkedList;
-import java.util.List;
+package nz.ac.auckland.se281.datastructures;
 
 public class Stack<T> {
-  List<T> stack;
+  LinkedList<T> stack;
 
   public Stack() {
     stack = new LinkedList<T>();
   }
 
   public void push(T data) {
-    stack.add(0, data);
+    stack.append(data);
   }
 
   public T pop() {
-    T data = stack.get(0);
-    stack.remove(0);
+    T data = stack.getTail().getData();
+    stack.remove(stack.size() - 1);
     return data;
   }
 
   public T peek() {
-    return stack.get(0);
+    return stack.getTail().getData();
   }
 
   public int size() {
@@ -27,35 +26,11 @@ public class Stack<T> {
   }
 
   public boolean isEmpty() {
-    if (stack.size() == 0) {
-      return true;
-    }
-    return false;
+    return stack.size() == 0;
   }
 
   @Override
   public String toString() {
-    String string;
-    StringBuilder sb = new StringBuilder();
-    for (T data : stack) {
-      sb.append(data + ", ");
-    }
-    int length = sb.length();
-    if (length > 2) {
-      sb.delete(length - 2, length);
-    }
-
-    string = "[" + sb.toString() + "]";
-    return string;
-
+    return stack.toString();
   }
-
-  public static void main(final String[] args) {
-    Stack<Integer> stack = new Stack<>();
-    stack.push(1);
-    stack.push(2);
-    stack.push(3);
-    System.out.println(stack.toString());
-  }
-
 }

@@ -1,11 +1,15 @@
+package nz.ac.auckland.se281.datastructures;
+
 public class Node<T> {
 
   private T data;
-  private Node<T> next = null;
-  private Node<T> previous = null;
+  private Node<T> next;
+  private Node<T> previous;
 
   public Node(T data) {
     this.data = data;
+    this.next = null;
+    this.previous = null;
   }
 
   public T getData() {
@@ -36,5 +40,4 @@ public class Node<T> {
   public String toString() {
     return data.toString();
   }
-
 }

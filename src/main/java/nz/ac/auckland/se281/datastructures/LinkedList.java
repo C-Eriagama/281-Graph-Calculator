@@ -1,4 +1,12 @@
+package nz.ac.auckland.se281.datastructures;
+
 public class LinkedList<T> {
+
+  private enum End {
+    APPEND,
+    PREPEND,
+  }
+
   private Node<T> head;
   private Node<T> tail;
 
@@ -7,25 +15,48 @@ public class LinkedList<T> {
     tail = null;
   }
 
-  public void add(T data) {
+  // Add node at end of list
+  public void add(T data, End end) {
     Node<T> node = new Node<T>(data);
 
+    // If list is empty, set head and tail to node
     if (head == null) {
       head = node;
       tail = node;
       return;
     }
 
-    tail.setNext(node);
-    node.setPrevious(tail);
-    tail = node;
+    // Add node to end of list
+    if (end == End.APPEND) {
+      tail.setNext(node);
+      node.setPrevious(tail);
+      tail = node;
 
+      // Add node to start of list
+    } else if (end == End.PREPEND) {
+      head.setPrevious(node);
+      node.setNext(head);
+      head = node;
+    }
+  }
+
+  public Node<T> getHead() {
+    return head;
+  }
+
+  public Node<T> getTail() {
+    return tail;
   }
 
   public void append(T data) {
-    add(data);
+    add(data, End.APPEND);
   }
 
+  public void prepend(T data) {
+    add(data, End.PREPEND);
+  }
+
+  // Get Node at index
   public T get(int index) {
     Node<T> node = head;
     for (int i = 0; i < index; i++) {
@@ -34,26 +65,45 @@ public class LinkedList<T> {
     return node.getData();
   }
 
+  // Insert node at index
   public void insert(int index, T data) {
 
     Node<T> node = locateNode(index);
 
     Node<T> newNode = new Node<T>(data);
+
+    // Overwrite next and previous of node and new node
     newNode.setNext(node);
     newNode.setPrevious(node.getPrevious());
     node.getPrevious().setNext(newNode);
     node.setPrevious(newNode);
   }
 
+  // Remove a node at index
   public void remove(int index) {
 
     Node<T> node = locateNode(index);
 
+    // If removing head, update head and next node
+    if (node == head) {
+      head = node.getNext();
+      head.setPrevious(null);
+      return;
+    }
+
+    // If removing tail, update tail and previous node
+    if (node == tail) {
+      tail = node.getPrevious();
+      tail.setNext(null);
+      return;
+    }
+
+    // Remove node from list
     node.getPrevious().setNext(node.getNext());
     node.getNext().setPrevious(node.getPrevious());
-
   }
 
+  // Find node at index
   private Node<T> locateNode(int index) {
     Node<T> node = head;
     for (int i = 0; i < index; i++) {
@@ -62,6 +112,7 @@ public class LinkedList<T> {
     return node;
   }
 
+  // Return size of list
   public int size() {
     Node<T> node = head;
 
@@ -73,6 +124,7 @@ public class LinkedList<T> {
     return size;
   }
 
+  // Check if list is empty
   public boolean isEmpty() {
     if (size() == 0) {
       return true;
@@ -80,6 +132,7 @@ public class LinkedList<T> {
     return false;
   }
 
+  // Find index of data
   public int indexOf(T data) {
     Node<T> node = head;
     int index = 0;
@@ -99,27 +152,21 @@ public class LinkedList<T> {
     String string;
     StringBuilder sb = new StringBuilder();
 
+    // Add all nodes to string
     Node<T> node = head;
     while (node != null) {
       sb.append(node.getData().toString() + ", ");
       node = node.getNext();
     }
 
+    // Remove last comma and space
     int length = sb.length();
     if (length > 2) {
       sb.delete(length - 2, length);
     }
 
+    // Add square brackets
     string = "[" + sb.toString() + "]";
     return string;
-
-  }
-
-  public static void main(final String[] args) {
-    LinkedList<Integer> list = new LinkedList<>();
-    list.append(1);
-    list.append(2);
-    list.insert(1, 3);
-    System.out.println(list);
   }
 }

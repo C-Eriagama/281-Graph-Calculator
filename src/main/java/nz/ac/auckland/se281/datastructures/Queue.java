@@ -1,25 +1,28 @@
-import java.util.ArrayList;
-import java.util.List;
+package nz.ac.auckland.se281.datastructures;
 
 public class Queue<T> {
-  List<T> queue;
+  LinkedList<T> queue;
 
   public Queue() {
-    queue = new ArrayList<T>();
+    queue = new LinkedList<T>();
   }
 
   public void enqueue(T data) {
-    queue.add(data);
+    queue.append(data);
   }
 
   public T dequeue() {
-    T data = queue.get(0);
+    T data = queue.getHead().getData();
     queue.remove(0);
     return data;
   }
 
   public T peek() {
-    return queue.get(0);
+    return queue.getHead().getData();
+  }
+
+  public int size() {
+    return queue.size();
   }
 
   public boolean isEmpty() {
@@ -28,31 +31,6 @@ public class Queue<T> {
 
   @Override
   public String toString() {
-    String string;
-    StringBuilder sb = new StringBuilder();
-    for (T data : queue) {
-      sb.append(data + ", ");
-    }
-    int length = sb.length();
-    if (length > 2) {
-      sb.delete(length - 2, length);
-    }
-
-    string = "[" + sb.toString() + "]";
-    return string;
-  }
-
-  public static void main(final String[] args) {
-    Queue<Integer> classUnderTest = new Queue<>();
-    System.out.println(classUnderTest.toString());
-
-    System.out.println();
-
-    Queue<Integer> classUnderTest1 = new Queue<>();
-    classUnderTest1.enqueue(1);
-    classUnderTest1.enqueue(2);
-    classUnderTest1.enqueue(3);
-    System.out.println(classUnderTest1.peek());
-    System.out.println(classUnderTest1.toString());
+    return queue.toString();
   }
 }
