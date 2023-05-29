@@ -1,6 +1,5 @@
 package nz.ac.auckland.se281.datastructures;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +17,7 @@ public class Graph<T extends Comparable<T>> {
   // Instance variables
   Set<T> verticies;
   Set<Edge<T>> edges;
-  Map<T, List<Edge<T>>> adjacencyMap;
+  Map<T, LinkedList<Edge<T>>> adjacencyMap;
 
   // Set<Set<T>> allEquivalenceClasses;
 
@@ -31,22 +30,48 @@ public class Graph<T extends Comparable<T>> {
     this.edges = new HashSet<Edge<T>>();
     this.edges.addAll(edges);
 
+    // Create adjacency list
+    createAdjacencyMap();
+
     // allEquivalenceClasses = new HashSet<Set<T>>();
     // allEquivalenceClasses = getAllEquivalenceClasses();
   }
 
-  private Map<T, List<Edge<T>>> createAdjacencyList() {
+  private void createAdjacencyMap() {
 
     // Use each vertex as key for each adjacency list
     for (T vertex : verticies) {
-      List<Edge<T>> adjacecentVertices = new ArrayList<Edge<T>>();
+      LinkedList<Edge<T>> adjacecentVertices = new LinkedList<Edge<T>>();
 
       // Find all edges that have the vertex as a source
       for (Edge<T> edge : edges) {
         if (edge.getSource().equals(vertex)) {
-          adjacecentVertices.add(edge);
+
+          // First edge just appended to list
+          if (adjacecentVertices.size() == 0) {
+            adjacecentVertices.append(edge);
+            continue;
+          }
+
+          // Insert edge into list in order
+          Node<Edge<T>> previous = adjacecentVertices.getHead();
+          while (previous.getNext() != null) {
+            T previousEdgeDestination = previous.getData().getDestination();
+
+            // If edge is greater than previous edge, continue
+            if (previousEdgeDestination.compareTo(edge.getDestination()) < 0) {
+              continue;
+            }
+
+            // If edge is less than previous edge, insert edge before previous edge
+            int index = adjacecentVertices.indexOf(previous.getData());
+            adjacecentVertices.insert(index, edge);
+          }
         }
       }
+
+      // Add adjacency list to adjacency map
+      adjacencyMap.put(vertex, adjacecentVertices);
     }
   }
 
@@ -90,24 +115,19 @@ public class Graph<T extends Comparable<T>> {
 
   public boolean isReflexive() {
 
-    // Count the number of edges that have the same source and destination
-    int count = 0;
-    for (Edge<T> edge : edges) {
-      if (edge.getSource().equals(edge.getDestination())) {
-        count++;
+    for (T vertex : verticies) {
+      if (!findDestinationVertices(vertex).contains(vertex)) {
+        return false;
       }
     }
 
-    // If the number of self edges is equal to the number of verticies, then the graph is reflexive
-    if (count == verticies.size()) {
-      return true;
-    }
-    return false;
+    return true;
   }
 
   public boolean isSymmetric() {
-    // TODO: Task 1.
+
     for (Edge<T> edge : edges) {
+      // Graph is not symmetric if there is an edge that does not have a symmetric edge
       if (!isSymmetricEdge(edge)) {
         return false;
       }
@@ -140,6 +160,7 @@ public class Graph<T extends Comparable<T>> {
 
         // Check if A->B and B->C, then A->C - for each vertex C
         for (T adjacentAdjacentVertex : adjacentAdjacentVertices) {
+          // Graph is not transitive if A->C does not exist
           if (!adjacentVertices.contains(adjacentAdjacentVertex)) {
             return false;
           }
@@ -162,7 +183,7 @@ public class Graph<T extends Comparable<T>> {
 
   public boolean isAntiSymmetric() {
 
-    // Graph antisymmetric if there is a symmetrical edge that is not a self loop
+    // Graph is not antisymmetric if there is a symmetrical edge that is not a self loop
     for (Edge<T> edge : edges) {
       if (isSymmetricEdge(edge) && edge.getSource() != edge.getDestination()) {
         return false;
