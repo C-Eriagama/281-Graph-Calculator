@@ -1,5 +1,7 @@
 package nz.ac.auckland.se281.datastructures;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +22,8 @@ public class Graph<T extends Comparable<T>> {
   Set<Edge<T>> edges;
   Map<T, LinkedList<Edge<T>>> adjacencyMap;
 
-  // Set<Set<T>> allEquivalenceClasses;
+  Set<Set<T>> allEquivalenceClasses;
+  Set<T> roots;
 
   public Graph(Set<T> verticies, Set<Edge<T>> edges) {
 
@@ -35,8 +38,12 @@ public class Graph<T extends Comparable<T>> {
     adjacencyMap = new HashMap<T, LinkedList<Edge<T>>>();
     createAdjacencyMap();
 
-    // allEquivalenceClasses = new HashSet<Set<T>>();
-    // allEquivalenceClasses = getAllEquivalenceClasses();
+    if (isEquivalence()) {
+      allEquivalenceClasses = new HashSet<Set<T>>();
+      allEquivalenceClasses = getAllEquivalenceClasses();
+    }
+
+    this.roots = getRoots();
   }
 
   private void createAdjacencyMap() {
@@ -92,13 +99,15 @@ public class Graph<T extends Comparable<T>> {
     }
 
     // Add all lowest values of equivalence classes to roots
-    // Set<Set<T>> allEquivalenceClasses = getAllEquivalenceClasses();
+    if (isEquivalence()) {
+      Set<Set<T>> allEquivalenceClasses = getAllEquivalenceClasses();
 
-    /* for (Set<T> equivalenceClass : allEquivalenceClasses) {
-      if (equivalenceClass.size() > 1) {
-        roots.add(Collections.min(equivalenceClass));
+      for (Set<T> equivalenceClass : allEquivalenceClasses) {
+        Set<Integer> integerEquivalenceClass = convertToIntegerSet(equivalenceClass);
+        Integer min = Collections.min(integerEquivalenceClass);
+        roots.add((T) min);
       }
-    } */
+    }
 
     return roots;
   }
@@ -116,6 +125,14 @@ public class Graph<T extends Comparable<T>> {
     // TODO: Need to add lowest value of equivalence class to roots
 
     return true;
+  }
+
+  private Set<Integer> convertToIntegerSet(Set<T> set) {
+    Set<Integer> integerSet = new HashSet<Integer>();
+    for (T element : set) {
+      integerSet.add(Integer.parseInt((String) element));
+    }
+    return integerSet;
   }
 
   public boolean isReflexive() {
@@ -212,25 +229,30 @@ public class Graph<T extends Comparable<T>> {
 
     // Check if graph is an equivalence relation
     if (!isEquivalence()) {
-      return verticies;
+      return new HashSet<T>();
     }
 
     return equivalenceClass;
   }
 
   // Helper method to find all equivalence classes
-  // private Set<Set<T>> getAllEquivalenceClasses() {
+  private Set<Set<T>> getAllEquivalenceClasses() {
 
-  //   Set<T> verticiesToAdd = verticies;
-  //   Set<Set<T>> allEquivalenceClasses = new HashSet<Set<T>>();
+    // Create a new set of all verticies
+    List<T> verticiesToAdd = new ArrayList<T>();
+    verticiesToAdd.addAll(verticies);
 
-  //   for (T vertex : verticiesToAdd) {
-  //     Set<T> equivalenceClass = getEquivalenceClass(vertex);
-  //     verticiesToAdd.removeAll(equivalenceClass);
-  //     allEquivalenceClasses.add(equivalenceClass);
-  //   }
-  //   return allEquivalenceClasses;
-  // }
+    Set<Set<T>> allEquivalenceClasses = new HashSet<Set<T>>();
+
+    // Find all equivalence classes
+    while (verticiesToAdd.size() != 0) {
+      T vertex = verticiesToAdd.get(0);
+      Set<T> equivalenceClass = getEquivalenceClass(vertex);
+      verticiesToAdd.removeAll(equivalenceClass);
+      allEquivalenceClasses.add(equivalenceClass);
+    }
+    return allEquivalenceClasses;
+  }
 
   public List<T> iterativeBreadthFirstSearch() {
     // TODO: Task 2.
