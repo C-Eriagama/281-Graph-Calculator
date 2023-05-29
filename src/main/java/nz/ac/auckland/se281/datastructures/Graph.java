@@ -1,7 +1,9 @@
 package nz.ac.auckland.se281.datastructures;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -16,6 +18,7 @@ public class Graph<T extends Comparable<T>> {
   // Instance variables
   Set<T> verticies;
   Set<Edge<T>> edges;
+  Map<T, List<Edge<T>>> adjacencyMap;
 
   // Set<Set<T>> allEquivalenceClasses;
 
@@ -30,6 +33,21 @@ public class Graph<T extends Comparable<T>> {
 
     // allEquivalenceClasses = new HashSet<Set<T>>();
     // allEquivalenceClasses = getAllEquivalenceClasses();
+  }
+
+  private Map<T, List<Edge<T>>> createAdjacencyList() {
+
+    // Use each vertex as key for each adjacency list
+    for (T vertex : verticies) {
+      List<Edge<T>> adjacecentVertices = new ArrayList<Edge<T>>();
+
+      // Find all edges that have the vertex as a source
+      for (Edge<T> edge : edges) {
+        if (edge.getSource().equals(vertex)) {
+          adjacecentVertices.add(edge);
+        }
+      }
+    }
   }
 
   public Set<T> getRoots() {
