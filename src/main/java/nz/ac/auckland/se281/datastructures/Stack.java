@@ -1,7 +1,7 @@
 package nz.ac.auckland.se281.datastructures;
 
 public class Stack<T> {
-  LinkedList<T> stack;
+  private LinkedList<T> stack;
 
   public Stack() {
     stack = new LinkedList<T>();

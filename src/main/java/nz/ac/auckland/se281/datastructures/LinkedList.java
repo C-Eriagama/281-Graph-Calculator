@@ -163,6 +163,8 @@ public class LinkedList<T> {
   public int indexOf(T data) {
     Node<T> node = head;
     int index = 0;
+
+    // Find node with data
     while (node != null) {
       if (node.getData().equals(data)) {
         return index;

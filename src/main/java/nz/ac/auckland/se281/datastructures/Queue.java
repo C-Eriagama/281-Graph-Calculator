@@ -1,7 +1,7 @@
 package nz.ac.auckland.se281.datastructures;
 
 public class Queue<T> {
-  LinkedList<T> queue;
+  private LinkedList<T> queue;
 
   public Queue() {
     queue = new LinkedList<T>();

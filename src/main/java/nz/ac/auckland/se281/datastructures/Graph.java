@@ -18,12 +18,12 @@ import java.util.Set;
 public class Graph<T extends Comparable<T>> {
 
   // Instance variables
-  Set<T> verticies;
-  Set<Edge<T>> edges;
-  Map<T, LinkedList<Edge<T>>> adjacencyMap; // Linked List is sorted
+  private Set<T> verticies;
+  private Set<Edge<T>> edges;
+  private Map<T, LinkedList<Edge<T>>> adjacencyMap; // Linked List is sorted
 
-  Set<Set<T>> allEquivalenceClasses;
-  Set<T> roots;
+  private Set<Set<T>> allEquivalenceClasses;
+  private Set<T> roots;
 
   public Graph(Set<T> verticies, Set<Edge<T>> edges) {
 
@@ -40,7 +40,6 @@ public class Graph<T extends Comparable<T>> {
 
     // If graph is equivalence, find all equivalence classes
     if (isEquivalence()) {
-      allEquivalenceClasses = new HashSet<Set<T>>();
       allEquivalenceClasses = getAllEquivalenceClasses();
     }
 

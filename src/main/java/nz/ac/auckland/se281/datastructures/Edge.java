@@ -10,8 +10,8 @@ package nz.ac.auckland.se281.datastructures;
 public class Edge<T> {
 
   // Instance variables
-  T source;
-  T destination;
+  private T source;
+  private T destination;
 
   public Edge(T source, T destination) {
     this.source = source;
