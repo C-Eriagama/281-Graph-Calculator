@@ -25,4 +25,9 @@ public class Edge<T> {
   public T getDestination() {
     return destination;
   }
+
+  @Override
+  public String toString() {
+    return "" + destination;
+  }
 }

@@ -275,7 +275,75 @@ public class Graph<T extends Comparable<T>> {
 
   public List<T> iterativeBreadthFirstSearch() {
     // TODO: Task 2.
-    throw new UnsupportedOperationException();
+
+    // Vertices visited
+    List<T> verticiesVisited = new ArrayList<T>();
+
+    // Vertices to visit
+    Set<T> verticiesToVisit = new HashSet<T>();
+    verticiesToVisit.addAll(roots);
+    Set<Integer> verticiesToVisitIntegers = convertToIntegerSet(verticiesToVisit);
+
+    // Add smallest root to queue
+    Queue<T> queue = new Queue<T>();
+    Integer min = Collections.min(verticiesToVisitIntegers);
+    T minimum = getVertex(min, verticiesToVisit);
+    queue.enqueue(minimum);
+    verticiesToVisitIntegers.remove(Collections.min(verticiesToVisitIntegers));
+
+    // Go through queue
+    while (!queue.isEmpty()) {
+      T vertex = queue.peek();
+      verticiesVisited.add(vertex);
+
+      // If vertex has no adjacent vertices, remove from queue and continue
+      if (adjacencyMap.get(vertex).isEmpty()) {
+        queue.dequeue();
+        continue;
+      }
+
+      // Add all adjacent vertices to queue in order
+      int i = 0;
+      Node<Edge<T>> node = adjacencyMap.get(vertex).getHead();
+      while (node.getNext() != null) {
+        // If vertex is same as destination, skip
+        if (node.getData().getDestination().equals(vertex)) {
+          node = node.getNext();
+          continue;
+        }
+        // Add destination to queue
+        queue.enqueue(node.getData().getDestination());
+        node = node.getNext();
+      }
+
+      // Remove vertex from queue
+      queue.dequeue();
+
+      // If all roots have been visited, break
+      if (verticiesToVisitIntegers.isEmpty()) {
+        break;
+      }
+
+      // Go to next root if queue is empty
+      if (queue.isEmpty()) {
+        Integer min2 = Collections.min(verticiesToVisitIntegers);
+        T minimum2 = getVertex(min2, verticiesToVisit);
+        queue.enqueue(minimum2);
+        verticiesToVisitIntegers.remove(Collections.min(verticiesToVisitIntegers));
+      }
+    }
+    return verticiesVisited;
+  }
+
+  // Helper method to return vertex from set
+  private T getVertex(Integer vertex, Set<T> verticies) {
+    for (T v : verticies) {
+      Integer v1 = (Integer.parseInt((String) v));
+      if (v1.equals(vertex)) {
+        return v;
+      }
+    }
+    return null;
   }
 
   public List<T> iterativeDepthFirstSearch() {
