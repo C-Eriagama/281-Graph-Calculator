@@ -20,7 +20,7 @@ public class Graph<T extends Comparable<T>> {
   // Instance variables
   Set<T> verticies;
   Set<Edge<T>> edges;
-  Map<T, LinkedList<Edge<T>>> adjacencyMap;
+  Map<T, LinkedList<Edge<T>>> adjacencyMap; // Linked List is sorted
 
   Set<Set<T>> allEquivalenceClasses;
   Set<T> roots;
@@ -38,6 +38,7 @@ public class Graph<T extends Comparable<T>> {
     adjacencyMap = new HashMap<T, LinkedList<Edge<T>>>();
     createAdjacencyMap();
 
+    // If graph is equivalence, find all equivalence classes
     if (isEquivalence()) {
       allEquivalenceClasses = new HashSet<Set<T>>();
       allEquivalenceClasses = getAllEquivalenceClasses();
@@ -46,6 +47,7 @@ public class Graph<T extends Comparable<T>> {
     this.roots = getRoots();
   }
 
+  // Helper method to create adjacency map
   private void createAdjacencyMap() {
 
     // Use each vertex as key for each adjacency list
@@ -69,14 +71,25 @@ public class Graph<T extends Comparable<T>> {
 
             // If edge is greater than previous edge, continue
             if (previousEdgeDestination.compareTo(edge.getDestination()) < 0) {
-              previous = previous.getNext();
-              continue;
+
+              // If previous is tail, append edge to tail
+              if (previous == adjacecentVertices.getTail()) {
+                adjacecentVertices.append(edge);
+                break;
+                // Else continue to next edge
+              } else {
+                previous = previous.getNext();
+                continue;
+              }
             }
 
             // If edge is less than previous edge, insert edge before previous edge
             int index = adjacecentVertices.indexOf(previous.getData());
             adjacecentVertices.insert(index, edge);
 
+            if (previous == adjacecentVertices.getTail()) {
+              break;
+            }
             previous = previous.getNext();
           } while (previous.getNext() != null);
         }
@@ -127,6 +140,7 @@ public class Graph<T extends Comparable<T>> {
     return true;
   }
 
+  // Helper method to convert a set of generic type to a set of integers
   private Set<Integer> convertToIntegerSet(Set<T> set) {
     Set<Integer> integerSet = new HashSet<Integer>();
     for (T element : set) {

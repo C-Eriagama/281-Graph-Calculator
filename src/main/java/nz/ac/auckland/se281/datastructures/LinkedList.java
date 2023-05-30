@@ -130,6 +130,18 @@ public class LinkedList<T> {
     Node<T> node = head;
 
     int size = 0;
+
+    // If list is empty, return 0
+    if (node == null) {
+      return size;
+    }
+
+    // If list has one node, return 1
+    if (head == tail) {
+      return 1;
+    }
+
+    // Count nodes
     while (node != tail) {
       node = node.getNext();
       size++;
