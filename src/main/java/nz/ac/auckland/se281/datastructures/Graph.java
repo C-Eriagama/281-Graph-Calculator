@@ -52,51 +52,57 @@ public class Graph<T extends Comparable<T>> {
 
     // Use each vertex as key for each adjacency list
     for (T vertex : verticies) {
-      LinkedList<Edge<T>> adjacecentVertices = new LinkedList<Edge<T>>();
+      LinkedList<Edge<T>> adjacentVertices = new LinkedList<Edge<T>>();
 
       // Find all edges that have the vertex as a source
       for (Edge<T> edge : edges) {
-        if (edge.getSource().equals(vertex)) {
 
-          // First edge just appended to list
-          if (adjacecentVertices.size() == 0) {
-            adjacecentVertices.append(edge);
-            continue;
+        if (!(edge.getSource().equals(vertex))) {
+          continue;
+        }
+
+        // First edge just appended to list
+        if (adjacentVertices.size() == 0) {
+          adjacentVertices.append(edge);
+          continue;
+        }
+
+        // Insert edge into list in order
+        Node<Edge<T>> previous = adjacentVertices.getHead();
+        int i = 0;
+        while (previous.getNext() != null || adjacentVertices.size() == 1) {
+
+          if (i != 0) {
+            previous = previous.getNext();
           }
 
-          // Insert edge into list in order
-          Node<Edge<T>> previous = adjacecentVertices.getHead();
-          do {
-            T previousEdgeDestination = previous.getData().getDestination();
+          T previousEdgeDestination = previous.getData().getDestination();
 
-            // If edge is greater than previous edge, continue
-            if (previousEdgeDestination.compareTo(edge.getDestination()) < 0) {
+          // If edge is greater than previous edge, continue
+          if (previousEdgeDestination.compareTo(edge.getDestination()) < 0) {
 
-              // If previous is tail, append edge to tail
-              if (previous == adjacecentVertices.getTail()) {
-                adjacecentVertices.append(edge);
-                break;
-                // Else continue to next edge
-              } else {
-                previous = previous.getNext();
-                continue;
-              }
-            }
-
-            // If edge is less than previous edge, insert edge before previous edge
-            int index = adjacecentVertices.indexOf(previous.getData());
-            adjacecentVertices.insert(index, edge);
-
-            if (previous == adjacecentVertices.getTail()) {
+            // If previous is tail, append edge to tail
+            if (previous == adjacentVertices.getTail()) {
+              adjacentVertices.append(edge);
               break;
+              // Else continue to next edge
+            } else {
+              if (i == 0) {
+                i++;
+              }
+              continue;
             }
-            previous = previous.getNext();
-          } while (previous.getNext() != null);
+          }
+
+          // If edge is less than previous edge, insert edge before previous edge
+          int index = adjacentVertices.indexOf(previous.getData());
+          adjacentVertices.insert(index, edge);
+          break;
         }
       }
 
       // Add adjacency list to adjacency map
-      adjacencyMap.put(vertex, adjacecentVertices);
+      adjacencyMap.put(vertex, adjacentVertices);
     }
   }
 

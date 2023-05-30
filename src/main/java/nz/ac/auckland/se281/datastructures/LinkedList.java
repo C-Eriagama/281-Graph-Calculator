@@ -127,12 +127,11 @@ public class LinkedList<T> {
 
   // Return size of list
   public int size() {
-    Node<T> node = head;
 
     int size = 0;
 
     // If list is empty, return 0
-    if (node == null) {
+    if (head == null) {
       return size;
     }
 
@@ -141,11 +140,14 @@ public class LinkedList<T> {
       return 1;
     }
 
+    Node<T> node = head;
+
     // Count nodes
     while (node != tail) {
       node = node.getNext();
       size++;
     }
+    size++;
     return size;
   }
 
