@@ -29,6 +29,11 @@ public class Queue<T> {
     return queue.size() == 0;
   }
 
+  public boolean contains(T data) {
+    int index = queue.indexOf(data);
+    return index != -1;
+  }
+
   @Override
   public String toString() {
     return queue.toString();

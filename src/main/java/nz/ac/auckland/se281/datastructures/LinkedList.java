@@ -97,6 +97,13 @@ public class LinkedList<T> {
 
     Node<T> node = locateNode(index);
 
+    // Removing only node
+    if (head == tail) {
+      head = null;
+      tail = null;
+      return;
+    }
+
     // If removing head, update head and next node
     if (node == head) {
       head = node.getNext();

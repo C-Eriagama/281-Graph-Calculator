@@ -118,12 +118,11 @@ public class Graph<T extends Comparable<T>> {
 
     // Add all lowest values of equivalence classes to roots
     if (isEquivalence()) {
-      Set<Set<T>> allEquivalenceClasses = getAllEquivalenceClasses();
 
       for (Set<T> equivalenceClass : allEquivalenceClasses) {
         Set<Integer> integerEquivalenceClass = convertToIntegerSet(equivalenceClass);
         Integer min = Collections.min(integerEquivalenceClass);
-        roots.add((T) min);
+        roots.add(getVertex(min, equivalenceClass));
       }
     }
 
@@ -140,8 +139,6 @@ public class Graph<T extends Comparable<T>> {
       }
     }
 
-    // TODO: Need to add lowest value of equivalence class to roots
-
     return true;
   }
 
@@ -149,6 +146,10 @@ public class Graph<T extends Comparable<T>> {
   private Set<Integer> convertToIntegerSet(Set<T> set) {
     Set<Integer> integerSet = new HashSet<Integer>();
     for (T element : set) {
+      if (element.getClass() == Integer.class) {
+        integerSet.add((Integer) element);
+        continue;
+      }
       integerSet.add(Integer.parseInt((String) element));
     }
     return integerSet;
@@ -305,15 +306,29 @@ public class Graph<T extends Comparable<T>> {
       // Add all adjacent vertices to queue in order
       int i = 0;
       Node<Edge<T>> node = adjacencyMap.get(vertex).getHead();
-      while (node.getNext() != null) {
-        // If vertex is same as destination, skip
-        if (node.getData().getDestination().equals(vertex)) {
+      while (node.getNext() != null || i == 0) {
+
+        if (i != 0) {
           node = node.getNext();
+        }
+
+        // If vertex is same as destination or vertice already visited, skip
+        if (verticiesVisited.contains(node.getData().getDestination())
+            || queue.contains(node.getData().getDestination())) {
+          i++;
           continue;
         }
+
         // Add destination to queue
         queue.enqueue(node.getData().getDestination());
-        node = node.getNext();
+
+        if (i == 0) {
+          i++;
+        }
+
+        if (adjacencyMap.get(vertex).size() == 1) {
+          break;
+        }
       }
 
       // Remove vertex from queue
@@ -321,7 +336,7 @@ public class Graph<T extends Comparable<T>> {
 
       // If all roots have been visited, break
       if (verticiesToVisitIntegers.isEmpty()) {
-        break;
+        continue;
       }
 
       // Go to next root if queue is empty
@@ -338,7 +353,14 @@ public class Graph<T extends Comparable<T>> {
   // Helper method to return vertex from set
   private T getVertex(Integer vertex, Set<T> verticies) {
     for (T v : verticies) {
-      Integer v1 = (Integer.parseInt((String) v));
+      Integer v1;
+
+      if (v.getClass() == Integer.class) {
+        v1 = (Integer) v;
+      } else {
+        v1 = (Integer.parseInt((String) v));
+      }
+
       if (v1.equals(vertex)) {
         return v;
       }
