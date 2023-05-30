@@ -47,7 +47,7 @@ public class Graph<T extends Comparable<T>> {
     this.roots = getRoots();
   }
 
-  // Helper method to create adjacency map
+  // Helper method to create adjacency map with vertice as key and sorted list of edges as value
   private void createAdjacencyMap() {
 
     // Use each vertex as key for each adjacency list
