@@ -71,6 +71,7 @@ public class Graph<T extends Comparable<T>> {
         int i = 0;
         while (previous.getNext() != null || adjacentVertices.size() == 1) {
 
+          // Iterate after first
           if (i != 0) {
             previous = previous.getNext();
           }
@@ -84,6 +85,7 @@ public class Graph<T extends Comparable<T>> {
             if (previous == adjacentVertices.getTail()) {
               adjacentVertices.append(edge);
               break;
+
               // Else continue to next edge
             } else {
               if (i == 0) {
@@ -119,6 +121,7 @@ public class Graph<T extends Comparable<T>> {
     // Add all lowest values of equivalence classes to roots
     if (isEquivalence()) {
 
+      // Find lowest value of each equivalence class
       for (Set<T> equivalenceClass : allEquivalenceClasses) {
         Set<Integer> integerEquivalenceClass = convertToIntegerSet(equivalenceClass);
         Integer min = Collections.min(integerEquivalenceClass);
@@ -145,7 +148,10 @@ public class Graph<T extends Comparable<T>> {
   // Helper method to convert a set of generic type to a set of integers
   private Set<Integer> convertToIntegerSet(Set<T> set) {
     Set<Integer> integerSet = new HashSet<Integer>();
+
+    // Convert each element to integer
     for (T element : set) {
+      // Cast if already Integer
       if (element.getClass() == Integer.class) {
         integerSet.add((Integer) element);
         continue;
@@ -275,7 +281,6 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public List<T> iterativeBreadthFirstSearch() {
-    // TODO: Task 2.
 
     // Vertices visited
     List<T> verticiesVisited = new ArrayList<T>();
@@ -306,13 +311,15 @@ public class Graph<T extends Comparable<T>> {
       // Add all adjacent vertices to queue in order
       int i = 0;
       Node<Edge<T>> node = adjacencyMap.get(vertex).getHead();
+
       while (node.getNext() != null || i == 0) {
 
+        // Iterate after first
         if (i != 0) {
           node = node.getNext();
         }
 
-        // If vertex is same as destination or vertice already visited, skip
+        // If vertex is in queue or vertice already visited, skip
         if (verticiesVisited.contains(node.getData().getDestination())
             || queue.contains(node.getData().getDestination())) {
           i++;
@@ -322,12 +329,9 @@ public class Graph<T extends Comparable<T>> {
         // Add destination to queue
         queue.enqueue(node.getData().getDestination());
 
+        // Iterate if first
         if (i == 0) {
           i++;
-        }
-
-        if (adjacencyMap.get(vertex).size() == 1) {
-          break;
         }
       }
 
@@ -352,15 +356,18 @@ public class Graph<T extends Comparable<T>> {
 
   // Helper method to return vertex from set
   private T getVertex(Integer vertex, Set<T> verticies) {
+    // Loop through all verticies
     for (T v : verticies) {
       Integer v1;
 
+      // Convert to integer if not already
       if (v.getClass() == Integer.class) {
         v1 = (Integer) v;
       } else {
         v1 = (Integer.parseInt((String) v));
       }
 
+      // Compare verticies to find match
       if (v1.equals(vertex)) {
         return v;
       }
