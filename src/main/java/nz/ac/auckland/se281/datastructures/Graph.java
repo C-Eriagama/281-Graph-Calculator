@@ -162,11 +162,8 @@ public class Graph<T extends Comparable<T>> {
     // Convert each element to integer
     for (T element : set) {
       // Cast if already Integer
-      if (element.getClass() == Integer.class) {
-        integerSet.add((Integer) element);
-        continue;
-      }
-      integerSet.add(Integer.parseInt((String) element));
+      Integer elementInt = castToInteger(element);
+      integerSet.add(elementInt);
     }
     return integerSet;
   }
@@ -368,14 +365,7 @@ public class Graph<T extends Comparable<T>> {
   private T getVertex(Integer vertex, Set<T> verticies) {
     // Loop through all verticies
     for (T v : verticies) {
-      Integer v1;
-
-      // Convert to integer if not already
-      if (v.getClass() == Integer.class) {
-        v1 = (Integer) v;
-      } else {
-        v1 = (Integer.parseInt((String) v));
-      }
+      Integer v1 = castToInteger(v);
 
       // Compare verticies to find match
       if (v1.equals(vertex)) {
