@@ -46,77 +46,6 @@ public class Graph<T extends Comparable<T>> {
     this.roots = getRoots();
   }
 
-  // Helper method to create adjacency map with vertice as key and sorted list of edges as value
-  private void createAdjacencyMap() {
-
-    // Use each vertex as key for each adjacency list
-    for (T vertex : verticies) {
-      LinkedList<Edge<T>> adjacentVertices = new LinkedList<Edge<T>>();
-
-      // Find all edges that have the vertex as a source
-      for (Edge<T> edge : edges) {
-
-        if (!(edge.getSource().equals(vertex))) {
-          continue;
-        }
-
-        // First edge just appended to list
-        if (adjacentVertices.size() == 0) {
-          adjacentVertices.append(edge);
-          continue;
-        }
-
-        // Insert edge into list in order
-        Node<Edge<T>> previous = adjacentVertices.getHead();
-        int i = 0;
-        while (previous.getNext() != null || adjacentVertices.size() == 1) {
-
-          // Iterate after first
-          if (i != 0) {
-            previous = previous.getNext();
-          }
-
-          T previousEdgeDestination = previous.getData().getDestination();
-          // Convert to integer if not already
-          Integer previousEdgeDestinationInteger = castToInteger(previousEdgeDestination);
-
-          // If edge is greater than previous edge, continue
-          if (previousEdgeDestinationInteger.compareTo(castToInteger(edge.getDestination())) < 0) {
-
-            // If previous is tail, append edge to tail
-            if (previous == adjacentVertices.getTail()) {
-              adjacentVertices.append(edge);
-              break;
-
-              // Else continue to next edge
-            } else {
-              if (i == 0) {
-                i++;
-              }
-              continue;
-            }
-          }
-
-          // If edge is less than previous edge, insert edge before previous edge
-          int index = adjacentVertices.indexOf(previous.getData());
-          adjacentVertices.insert(index, edge);
-          break;
-        }
-      }
-
-      // Add adjacency list to adjacency map
-      adjacencyMap.put(vertex, adjacentVertices);
-    }
-  }
-
-  public Integer castToInteger(T data) {
-    if (data.getClass() == Integer.class) {
-      return (Integer) data;
-    } else {
-      return Integer.parseInt((String) data);
-    }
-  }
-
   public Set<T> getRoots() {
 
     Set<T> roots = new HashSet<T>();
@@ -142,32 +71,6 @@ public class Graph<T extends Comparable<T>> {
     return roots;
   }
 
-  // Helper method to check if a vertex is a root
-  private boolean isRoot(T vertex) {
-
-    // Check if vertice is a destination of any edge
-    for (Edge<T> edge : edges) {
-      if ((edge.getDestination().equals(vertex))) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  // Helper method to convert a set of generic type to a set of integers
-  private Set<Integer> convertToIntegerSet(Set<T> set) {
-    Set<Integer> integerSet = new HashSet<Integer>();
-
-    // Convert each element to integer
-    for (T element : set) {
-      // Cast if already Integer
-      Integer elementInt = castToInteger(element);
-      integerSet.add(elementInt);
-    }
-    return integerSet;
-  }
-
   public boolean isReflexive() {
 
     for (T vertex : verticies) {
@@ -190,19 +93,6 @@ public class Graph<T extends Comparable<T>> {
     return true;
   }
 
-  // Helper method to check if an edge has a symmetric edge - including self loop
-  private boolean isSymmetricEdge(Edge<T> edge) {
-
-    // Check if there is an edge with the same source and destination but in the opposite direction
-    for (Edge<T> e : edges) {
-      if (edge.getSource().equals(e.getDestination())
-          && edge.getDestination().equals(e.getSource())) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   public boolean isTransitive() {
 
     // Find all B such that A->B - for each vertex A
@@ -223,17 +113,6 @@ public class Graph<T extends Comparable<T>> {
       }
     }
     return true;
-  }
-
-  // Helper method to find all vertices that a vertex has an edge to
-  private Set<T> findDestinationVertices(T vertex) {
-    Set<T> adjacentVertices = new HashSet<T>();
-    for (Edge<T> edge : edges) {
-      if (edge.getSource().equals(vertex)) {
-        adjacentVertices.add(edge.getDestination());
-      }
-    }
-    return adjacentVertices;
   }
 
   public boolean isAntiSymmetric() {
@@ -266,25 +145,6 @@ public class Graph<T extends Comparable<T>> {
     }
 
     return equivalenceClass;
-  }
-
-  // Helper method to find all equivalence classes
-  private Set<Set<T>> getAllEquivalenceClasses() {
-
-    // Create a new set of all verticies
-    List<T> verticiesToAdd = new ArrayList<T>();
-    verticiesToAdd.addAll(verticies);
-
-    Set<Set<T>> allEquivalenceClasses = new HashSet<Set<T>>();
-
-    // Find all equivalence classes
-    while (verticiesToAdd.size() != 0) {
-      T vertex = verticiesToAdd.get(0);
-      Set<T> equivalenceClass = getEquivalenceClass(vertex);
-      verticiesToAdd.removeAll(equivalenceClass);
-      allEquivalenceClasses.add(equivalenceClass);
-    }
-    return allEquivalenceClasses;
   }
 
   public List<T> iterativeBreadthFirstSearch() {
@@ -361,22 +221,7 @@ public class Graph<T extends Comparable<T>> {
     return verticiesVisited;
   }
 
-  // Helper method to return vertex from set
-  private T getVertex(Integer vertex, Set<T> verticies) {
-    // Loop through all verticies
-    for (T v : verticies) {
-      Integer v1 = castToInteger(v);
-
-      // Compare verticies to find match
-      if (v1.equals(vertex)) {
-        return v;
-      }
-    }
-    return null;
-  }
-
   public List<T> iterativeDepthFirstSearch() {
-    // TODO: Task 2.
 
     // Vertices visited
     List<T> verticiesVisited = new ArrayList<T>();
@@ -456,5 +301,160 @@ public class Graph<T extends Comparable<T>> {
   public List<T> recursiveDepthFirstSearch() {
     // TODO: Task 3.
     throw new UnsupportedOperationException();
+  }
+
+  // Helper method to create adjacency map with vertice as key and sorted list of edges as value
+  private void createAdjacencyMap() {
+
+    // Use each vertex as key for each adjacency list
+    for (T vertex : verticies) {
+      LinkedList<Edge<T>> adjacentVertices = new LinkedList<Edge<T>>();
+
+      // Find all edges that have the vertex as a source
+      for (Edge<T> edge : edges) {
+
+        if (!(edge.getSource().equals(vertex))) {
+          continue;
+        }
+
+        // First edge just appended to list
+        if (adjacentVertices.size() == 0) {
+          adjacentVertices.append(edge);
+          continue;
+        }
+
+        // Insert edge into list in order
+        Node<Edge<T>> previous = adjacentVertices.getHead();
+        int i = 0;
+        while (previous.getNext() != null || adjacentVertices.size() == 1) {
+
+          // Iterate after first
+          if (i != 0) {
+            previous = previous.getNext();
+          }
+
+          T previousEdgeDestination = previous.getData().getDestination();
+          // Convert to integer if not already
+          Integer previousEdgeDestinationInteger = castToInteger(previousEdgeDestination);
+
+          // If edge is greater than previous edge, continue
+          if (previousEdgeDestinationInteger.compareTo(castToInteger(edge.getDestination())) < 0) {
+
+            // If previous is tail, append edge to tail
+            if (previous == adjacentVertices.getTail()) {
+              adjacentVertices.append(edge);
+              break;
+
+              // Else continue to next edge
+            } else {
+              if (i == 0) {
+                i++;
+              }
+              continue;
+            }
+          }
+
+          // If edge is less than previous edge, insert edge before previous edge
+          int index = adjacentVertices.indexOf(previous.getData());
+          adjacentVertices.insert(index, edge);
+          break;
+        }
+      }
+
+      // Add adjacency list to adjacency map
+      adjacencyMap.put(vertex, adjacentVertices);
+    }
+  }
+
+  // Helper method to cast generic type to integer
+  private Integer castToInteger(T data) {
+    if (data.getClass() == Integer.class) {
+      return (Integer) data;
+    } else {
+      return Integer.parseInt((String) data);
+    }
+  }
+
+  // Helper method to check if a vertex is a root
+  private boolean isRoot(T vertex) {
+
+    // Check if vertice is a destination of any edge
+    for (Edge<T> edge : edges) {
+      if ((edge.getDestination().equals(vertex))) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  // Helper method to convert a set of generic type to a set of integers
+  private Set<Integer> convertToIntegerSet(Set<T> set) {
+    Set<Integer> integerSet = new HashSet<Integer>();
+
+    // Convert each element to integer
+    for (T element : set) {
+      // Cast if already Integer
+      Integer elementInt = castToInteger(element);
+      integerSet.add(elementInt);
+    }
+    return integerSet;
+  }
+
+  // Helper method to check if an edge has a symmetric edge - including self loop
+  private boolean isSymmetricEdge(Edge<T> edge) {
+
+    // Check if there is an edge with the same source and destination but in the opposite direction
+    for (Edge<T> e : edges) {
+      if (edge.getSource().equals(e.getDestination())
+          && edge.getDestination().equals(e.getSource())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Helper method to find all vertices that a vertex has an edge to
+  private Set<T> findDestinationVertices(T vertex) {
+    Set<T> adjacentVertices = new HashSet<T>();
+    for (Edge<T> edge : edges) {
+      if (edge.getSource().equals(vertex)) {
+        adjacentVertices.add(edge.getDestination());
+      }
+    }
+    return adjacentVertices;
+  }
+
+  // Helper method to find all equivalence classes
+  private Set<Set<T>> getAllEquivalenceClasses() {
+
+    // Create a new set of all verticies
+    List<T> verticiesToAdd = new ArrayList<T>();
+    verticiesToAdd.addAll(verticies);
+
+    Set<Set<T>> allEquivalenceClasses = new HashSet<Set<T>>();
+
+    // Find all equivalence classes
+    while (verticiesToAdd.size() != 0) {
+      T vertex = verticiesToAdd.get(0);
+      Set<T> equivalenceClass = getEquivalenceClass(vertex);
+      verticiesToAdd.removeAll(equivalenceClass);
+      allEquivalenceClasses.add(equivalenceClass);
+    }
+    return allEquivalenceClasses;
+  }
+
+  // Helper method to return vertex from set
+  private T getVertex(Integer vertex, Set<T> verticies) {
+    // Loop through all verticies
+    for (T v : verticies) {
+      Integer v1 = castToInteger(v);
+
+      // Compare verticies to find match
+      if (v1.equals(vertex)) {
+        return v;
+      }
+    }
+    return null;
   }
 }
