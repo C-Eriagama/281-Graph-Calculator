@@ -29,6 +29,11 @@ public class Stack<T> {
     return stack.size() == 0;
   }
 
+  public boolean contains(T data) {
+    int index = stack.indexOf(data);
+    return index != -1;
+  }
+
   @Override
   public String toString() {
     return stack.toString();

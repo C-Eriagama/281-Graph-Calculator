@@ -77,9 +77,11 @@ public class Graph<T extends Comparable<T>> {
           }
 
           T previousEdgeDestination = previous.getData().getDestination();
+          // Convert to integer if not already
+          Integer previousEdgeDestinationInteger = castToInteger(previousEdgeDestination);
 
           // If edge is greater than previous edge, continue
-          if (previousEdgeDestination.compareTo(edge.getDestination()) < 0) {
+          if (previousEdgeDestinationInteger.compareTo(castToInteger(edge.getDestination())) < 0) {
 
             // If previous is tail, append edge to tail
             if (previous == adjacentVertices.getTail()) {
@@ -104,6 +106,14 @@ public class Graph<T extends Comparable<T>> {
 
       // Add adjacency list to adjacency map
       adjacencyMap.put(vertex, adjacentVertices);
+    }
+  }
+
+  public Integer castToInteger(T data) {
+    if (data.getClass() == Integer.class) {
+      return (Integer) data;
+    } else {
+      return Integer.parseInt((String) data);
     }
   }
 
@@ -377,7 +387,75 @@ public class Graph<T extends Comparable<T>> {
 
   public List<T> iterativeDepthFirstSearch() {
     // TODO: Task 2.
-    throw new UnsupportedOperationException();
+
+    // Vertices visited
+    List<T> verticiesVisited = new ArrayList<T>();
+
+    // Vertices to visit
+    Set<T> verticiesToVisit = new HashSet<T>();
+    verticiesToVisit.addAll(roots);
+    Set<Integer> verticiesToVisitIntegers = convertToIntegerSet(verticiesToVisit);
+
+    // Add smallest root to queue
+    Stack<T> stack = new Stack<T>();
+    Integer min = Collections.min(verticiesToVisitIntegers);
+    T minimum = getVertex(min, verticiesToVisit);
+    stack.push(minimum);
+    verticiesToVisitIntegers.remove(Collections.min(verticiesToVisitIntegers));
+
+    // Go through stack
+    while (!stack.isEmpty()) {
+
+      T vertex = stack.pop();
+      verticiesVisited.add(vertex);
+
+      // If vertex has no adjacent vertices, remove from stack and continue
+      if (adjacencyMap.get(vertex).isEmpty()) {
+        continue;
+      }
+
+      // Add all adjacent vertices to stack in reverse order
+      int i = 0;
+      Node<Edge<T>> node = adjacencyMap.get(vertex).getTail();
+
+      while (node.getPrevious() != null || i == 0) {
+
+        // Iterate after first
+        if (i != 0) {
+          node = node.getPrevious();
+        }
+
+        // If vertex is in queue or vertice already visited, skip
+        if (verticiesVisited.contains(node.getData().getDestination())
+            || stack.contains(node.getData().getDestination())) {
+          i++;
+          continue;
+        }
+
+        // Add destination to queue
+        stack.push(node.getData().getDestination());
+
+        // Iterate if first
+        if (i == 0) {
+          i++;
+        }
+      }
+
+      // If all roots have been visited, break
+      if (verticiesToVisitIntegers.isEmpty()) {
+        continue;
+      }
+
+      // Go to next root if queue is empty
+      if (stack.isEmpty()) {
+        Integer min2 = Collections.min(verticiesToVisitIntegers);
+        T minimum2 = getVertex(min2, verticiesToVisit);
+        stack.push(minimum2);
+        verticiesToVisitIntegers.remove(Collections.min(verticiesToVisitIntegers));
+      }
+    }
+
+    return verticiesVisited;
   }
 
   public List<T> recursiveBreadthFirstSearch() {
