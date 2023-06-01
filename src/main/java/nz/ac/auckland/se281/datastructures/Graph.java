@@ -181,7 +181,7 @@ public class Graph<T extends Comparable<T>> {
       // Remove vertex from queue
       queue.dequeue();
 
-      // If all roots have been visited, break
+      // If all roots have been visited, skip adding root
       if (verticiesToVisitIntegers.isEmpty()) {
         continue;
       }
@@ -230,36 +230,7 @@ public class Graph<T extends Comparable<T>> {
         continue;
       }
 
-      // Add all adjacent vertices to stack in reverse order
-      int i = 0;
-      Node<Edge<T>> node = adjacencyMap.get(vertex).getTail();
-
-      while (node.getPrevious() != null || i == 0) {
-
-        // Iterate after first
-        if (i != 0) {
-          node = node.getPrevious();
-        }
-
-        // If vertex is in queue or vertice already visited, skip
-        if (verticiesVisited.contains(node.getData().getDestination())) {
-          i++;
-          continue;
-        }
-
-        // Add destination to queue
-        stack.push(node.getData().getDestination());
-
-        // Iterate if first
-        if (i == 0) {
-          i++;
-        }
-      }
-
-      // If all roots have been visited, break
-      if (verticiesToVisitIntegers.isEmpty()) {
-        continue;
-      }
+      addAdjacentVerticesStack(vertex, stack, verticiesVisited);
     }
 
     return verticiesVisited;
@@ -290,11 +261,30 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public List<T> recursiveDepthFirstSearch() {
-    // TODO: Task 3.
-    throw new UnsupportedOperationException();
+    // Vertices visited
+    List<T> verticiesVisited = new ArrayList<T>();
+
+    // Vertices to visit
+    Set<T> verticiesToVisit = new HashSet<T>();
+    verticiesToVisit.addAll(roots);
+    Set<Integer> verticiesToVisitIntegers = convertToIntegerSet(verticiesToVisit);
+
+    // Add all roots to stack in reverse order
+    Stack<T> stack = new Stack<T>();
+    for (int i = 0; i < verticiesToVisit.size(); i++) {
+      Integer max = Collections.max(verticiesToVisitIntegers);
+      T maximum = getVertex(max, verticiesToVisit);
+      stack.push(maximum);
+      verticiesToVisitIntegers.remove(Collections.max(verticiesToVisitIntegers));
+    }
+
+    // Go through stack recursively
+    recursiveDepthFirstSearchHelper(verticiesVisited, stack);
+
+    return verticiesVisited;
   }
 
-  // Helper method for recursive call
+  // Helper method for recursive BFS call
   private void recursiveBreadthFirstSearchHelper(
       List<T> verticiesVisited,
       Queue<T> queue,
@@ -330,15 +320,39 @@ public class Graph<T extends Comparable<T>> {
         verticiesVisited, queue, verticiesToVisitIntegers, verticiesToVisit);
   }
 
+  // Helper method for recursive DFS call
+  private void recursiveDepthFirstSearchHelper(List<T> verticiesVisited, Stack<T> stack) {
+
+    // Base case
+    if (stack.isEmpty()) {
+      return;
+    }
+
+    // Go through stack recursively
+    T vertex = stack.pop();
+
+    // Skip if vertex already visited
+    if (!verticiesVisited.contains(vertex)) {
+      verticiesVisited.add(vertex);
+
+      // Add all adjacent vertices to stack in reverse order
+      addAdjacentVerticesStack(vertex, stack, verticiesVisited);
+
+      // Go through stack recursively
+      recursiveDepthFirstSearchHelper(verticiesVisited, stack);
+    }
+  }
+
   // Helper method for adding adjacent vertices to queue
   private void addAdjacentVerticesQueue(T vertex, Queue<T> queue, List<T> verticiesVisited) {
 
-    // Add all adjacent vertices to queue in order
+    // If vertex has no adjacent vertices return
     int i = 0;
     if (adjacencyMap.get(vertex).isEmpty()) {
       return;
     }
 
+    // Add all adjacent vertices to queue in order
     Node<Edge<T>> node = adjacencyMap.get(vertex).getHead();
 
     while (node.getNext() != null || i == 0) {
@@ -357,6 +371,41 @@ public class Graph<T extends Comparable<T>> {
 
       // Add destination to queue
       queue.enqueue(node.getData().getDestination());
+
+      // Iterate if first
+      if (i == 0) {
+        i++;
+      }
+    }
+  }
+
+  // Helper method for adding adajacent vertices to stack
+  private void addAdjacentVerticesStack(T vertex, Stack<T> stack, List<T> verticiesVisited) {
+
+    // If vertex has no adjacent vertices return
+    int i = 0;
+    if (adjacencyMap.get(vertex).isEmpty()) {
+      return;
+    }
+
+    // Add all adjacent vertices to stack in order
+    Node<Edge<T>> node = adjacencyMap.get(vertex).getTail();
+
+    while (node.getPrevious() != null || i == 0) {
+
+      // Iterate after first
+      if (i != 0) {
+        node = node.getPrevious();
+      }
+
+      // If vertex already visited, skip
+      if (verticiesVisited.contains(node.getData().getDestination())) {
+        i++;
+        continue;
+      }
+
+      // Add destination to queue
+      stack.push(node.getData().getDestination());
 
       // Iterate if first
       if (i == 0) {
