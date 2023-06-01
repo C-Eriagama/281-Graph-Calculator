@@ -191,7 +191,7 @@ public class Graph<T extends Comparable<T>> {
         Integer min2 = Collections.min(verticiesToVisitIntegers);
         T minimum2 = getVertex(min2, verticiesToVisit);
         queue.enqueue(minimum2);
-        verticiesToVisitIntegers.remove(Collections.min(verticiesToVisitIntegers));
+        verticiesToVisitIntegers.remove(min2);
       }
     }
     return verticiesVisited;
@@ -283,9 +283,10 @@ public class Graph<T extends Comparable<T>> {
     verticiesToVisitIntegers.remove(Collections.min(verticiesToVisitIntegers));
 
     // Go through queue recursively
-    recursiveBreadthFirstSearchHelper(verticiesVisited, queue, verticiesToVisitIntegers);
+    recursiveBreadthFirstSearchHelper(
+        verticiesVisited, queue, verticiesToVisitIntegers, verticiesToVisit);
 
-    throw new UnsupportedOperationException();
+    return verticiesVisited;
   }
 
   public List<T> recursiveDepthFirstSearch() {
@@ -300,37 +301,33 @@ public class Graph<T extends Comparable<T>> {
       Set<Integer> verticiesToVisitIntegers,
       Set<T> verticiesToVisit) {
 
+    // Base case
+    if (queue.isEmpty()) {
+      return;
+    }
+
     // Go through queue recursively
-    if (!queue.isEmpty()) {
-      T vertex = queue.peek();
-      verticiesVisited.add(vertex);
+    T vertex = queue.peek();
+    verticiesVisited.add(vertex);
 
-      // If vertex has no adjacent vertices, remove from queue and continue
-      if (adjacencyMap.get(vertex).isEmpty()) {
-        queue.dequeue();
-        recursiveBreadthFirstSearchHelper(verticiesVisited, queue, verticiesToVisit);
-        return;
-      }
+    // Add all adjacent vertices to queue in order
+    addAdjacentVerticesQueue(vertex, queue, verticiesVisited);
 
-      // Add all adjacent vertices to queue in order
-      addAdjacentVerticesQueue(vertex, queue, verticiesVisited);
+    // Remove vertex from queue
+    queue.dequeue();
 
-      // Remove vertex from queue
-      queue.dequeue();
-
-      // If all roots have been visited, break
-      if (verticiesToVisit.isEmpty()) {
-        continue;
-      }
-
-      // Go to next root if queue is empty
-      if (queue.isEmpty()) {
-        Integer min2 = Collections.min(verticiesToVisit);
+    // Go to next root if queue is empty
+    if (queue.isEmpty()) {
+      if (!verticiesToVisitIntegers.isEmpty()) {
+        Integer min2 = Collections.min(verticiesToVisitIntegers);
         T minimum2 = getVertex(min2, verticiesToVisit);
         queue.enqueue(minimum2);
-        verticiesToVisit.remove(Collections.min(verticiesToVisit));
+        verticiesToVisitIntegers.remove(min2);
       }
     }
+
+    recursiveBreadthFirstSearchHelper(
+        verticiesVisited, queue, verticiesToVisitIntegers, verticiesToVisit);
   }
 
   // Helper method for adding adjacent vertices to queue
@@ -338,6 +335,10 @@ public class Graph<T extends Comparable<T>> {
 
     // Add all adjacent vertices to queue in order
     int i = 0;
+    if (adjacencyMap.get(vertex).isEmpty()) {
+      return;
+    }
+
     Node<Edge<T>> node = adjacencyMap.get(vertex).getHead();
 
     while (node.getNext() != null || i == 0) {
