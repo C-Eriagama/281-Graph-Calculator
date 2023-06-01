@@ -176,31 +176,7 @@ public class Graph<T extends Comparable<T>> {
       }
 
       // Add all adjacent vertices to queue in order
-      int i = 0;
-      Node<Edge<T>> node = adjacencyMap.get(vertex).getHead();
-
-      while (node.getNext() != null || i == 0) {
-
-        // Iterate after first
-        if (i != 0) {
-          node = node.getNext();
-        }
-
-        // If vertex is in queue or vertice already visited, skip
-        if (verticiesVisited.contains(node.getData().getDestination())
-            || queue.contains(node.getData().getDestination())) {
-          i++;
-          continue;
-        }
-
-        // Add destination to queue
-        queue.enqueue(node.getData().getDestination());
-
-        // Iterate if first
-        if (i == 0) {
-          i++;
-        }
-      }
+      addAdjacentVerticesQueue(vertex, queue, verticiesVisited);
 
       // Remove vertex from queue
       queue.dequeue();
@@ -290,13 +266,102 @@ public class Graph<T extends Comparable<T>> {
   }
 
   public List<T> recursiveBreadthFirstSearch() {
-    // TODO: Task 3.
+
+    // Vertices visited
+    List<T> verticiesVisited = new ArrayList<T>();
+
+    // Vertices to visit
+    Set<T> verticiesToVisit = new HashSet<T>();
+    verticiesToVisit.addAll(roots);
+    Set<Integer> verticiesToVisitIntegers = convertToIntegerSet(verticiesToVisit);
+
+    // Add smallest root to queue
+    Queue<T> queue = new Queue<T>();
+    Integer min = Collections.min(verticiesToVisitIntegers);
+    T minimum = getVertex(min, verticiesToVisit);
+    queue.enqueue(minimum);
+    verticiesToVisitIntegers.remove(Collections.min(verticiesToVisitIntegers));
+
+    // Go through queue recursively
+    recursiveBreadthFirstSearchHelper(verticiesVisited, queue, verticiesToVisitIntegers);
+
     throw new UnsupportedOperationException();
   }
 
   public List<T> recursiveDepthFirstSearch() {
     // TODO: Task 3.
     throw new UnsupportedOperationException();
+  }
+
+  // Helper method for recursive call
+  private void recursiveBreadthFirstSearchHelper(
+      List<T> verticiesVisited,
+      Queue<T> queue,
+      Set<Integer> verticiesToVisitIntegers,
+      Set<T> verticiesToVisit) {
+
+    // Go through queue recursively
+    if (!queue.isEmpty()) {
+      T vertex = queue.peek();
+      verticiesVisited.add(vertex);
+
+      // If vertex has no adjacent vertices, remove from queue and continue
+      if (adjacencyMap.get(vertex).isEmpty()) {
+        queue.dequeue();
+        recursiveBreadthFirstSearchHelper(verticiesVisited, queue, verticiesToVisit);
+        return;
+      }
+
+      // Add all adjacent vertices to queue in order
+      addAdjacentVerticesQueue(vertex, queue, verticiesVisited);
+
+      // Remove vertex from queue
+      queue.dequeue();
+
+      // If all roots have been visited, break
+      if (verticiesToVisit.isEmpty()) {
+        continue;
+      }
+
+      // Go to next root if queue is empty
+      if (queue.isEmpty()) {
+        Integer min2 = Collections.min(verticiesToVisit);
+        T minimum2 = getVertex(min2, verticiesToVisit);
+        queue.enqueue(minimum2);
+        verticiesToVisit.remove(Collections.min(verticiesToVisit));
+      }
+    }
+  }
+
+  // Helper method for adding adjacent vertices to queue
+  private void addAdjacentVerticesQueue(T vertex, Queue<T> queue, List<T> verticiesVisited) {
+
+    // Add all adjacent vertices to queue in order
+    int i = 0;
+    Node<Edge<T>> node = adjacencyMap.get(vertex).getHead();
+
+    while (node.getNext() != null || i == 0) {
+
+      // Iterate after first
+      if (i != 0) {
+        node = node.getNext();
+      }
+
+      // If vertex is in queue or vertice already visited, skip
+      if (verticiesVisited.contains(node.getData().getDestination())
+          || queue.contains(node.getData().getDestination())) {
+        i++;
+        continue;
+      }
+
+      // Add destination to queue
+      queue.enqueue(node.getData().getDestination());
+
+      // Iterate if first
+      if (i == 0) {
+        i++;
+      }
+    }
   }
 
   // Helper method to create adjacency map with vertice as key and sorted list of edges as value
