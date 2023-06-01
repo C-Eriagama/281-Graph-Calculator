@@ -231,17 +231,22 @@ public class Graph<T extends Comparable<T>> {
     verticiesToVisit.addAll(roots);
     Set<Integer> verticiesToVisitIntegers = convertToIntegerSet(verticiesToVisit);
 
-    // Add smallest root to queue
+    // Add all roots to stack in reverse order
     Stack<T> stack = new Stack<T>();
-    Integer min = Collections.min(verticiesToVisitIntegers);
-    T minimum = getVertex(min, verticiesToVisit);
-    stack.push(minimum);
-    verticiesToVisitIntegers.remove(Collections.min(verticiesToVisitIntegers));
+    for (int i = 0; i < verticiesToVisit.size(); i++) {
+      Integer max = Collections.max(verticiesToVisitIntegers);
+      T maximum = getVertex(max, verticiesToVisit);
+      stack.push(maximum);
+      verticiesToVisitIntegers.remove(Collections.max(verticiesToVisitIntegers));
+    }
 
     // Go through stack
     while (!stack.isEmpty()) {
 
       T vertex = stack.pop();
+      if (verticiesVisited.contains(vertex)) {
+        continue;
+      }
       verticiesVisited.add(vertex);
 
       // If vertex has no adjacent vertices, remove from stack and continue
@@ -261,8 +266,7 @@ public class Graph<T extends Comparable<T>> {
         }
 
         // If vertex is in queue or vertice already visited, skip
-        if (verticiesVisited.contains(node.getData().getDestination())
-            || stack.contains(node.getData().getDestination())) {
+        if (verticiesVisited.contains(node.getData().getDestination())) {
           i++;
           continue;
         }
@@ -279,14 +283,6 @@ public class Graph<T extends Comparable<T>> {
       // If all roots have been visited, break
       if (verticiesToVisitIntegers.isEmpty()) {
         continue;
-      }
-
-      // Go to next root if queue is empty
-      if (stack.isEmpty()) {
-        Integer min2 = Collections.min(verticiesToVisitIntegers);
-        T minimum2 = getVertex(min2, verticiesToVisit);
-        stack.push(minimum2);
-        verticiesToVisitIntegers.remove(Collections.min(verticiesToVisitIntegers));
       }
     }
 
