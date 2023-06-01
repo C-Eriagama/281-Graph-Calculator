@@ -337,10 +337,9 @@ public class Graph<T extends Comparable<T>> {
 
       // Add all adjacent vertices to stack in reverse order
       addAdjacentVerticesStack(vertex, stack, verticiesVisited);
-
-      // Go through stack recursively
-      recursiveDepthFirstSearchHelper(verticiesVisited, stack);
     }
+    // Go through stack recursively
+    recursiveDepthFirstSearchHelper(verticiesVisited, stack);
   }
 
   // Helper method for adding adjacent vertices to queue
