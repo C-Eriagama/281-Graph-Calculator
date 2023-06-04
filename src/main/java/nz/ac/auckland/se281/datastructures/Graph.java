@@ -25,6 +25,12 @@ public class Graph<T extends Comparable<T>> {
   private Set<Set<T>> allEquivalenceClasses;
   private Set<T> roots;
 
+  /**
+   * Creates a new Graph.
+   *
+   * @param verticies The set of verticies in the graph.
+   * @param edges The set of edges in the graph.
+   */
   public Graph(Set<T> verticies, Set<Edge<T>> edges) {
 
     // Add all verticies and edges to instance variables
@@ -46,6 +52,11 @@ public class Graph<T extends Comparable<T>> {
     this.roots = getRoots();
   }
 
+  /**
+   * Gets the roots in the graph.
+   *
+   * @return The set of roots in the graph.
+   */
   public Set<T> getRoots() {
 
     Set<T> roots = new HashSet<T>();
@@ -71,6 +82,11 @@ public class Graph<T extends Comparable<T>> {
     return roots;
   }
 
+  /**
+   * Determines if a graph is reflexive or not.
+   *
+   * @return True if the graph is reflexive, false otherwise.
+   */
   public boolean isReflexive() {
 
     for (T vertex : verticies) {
@@ -82,6 +98,11 @@ public class Graph<T extends Comparable<T>> {
     return true;
   }
 
+  /**
+   * Determines if a graph is symmetric or not.
+   *
+   * @return True if the graph is symmetric, false otherwise.
+   */
   public boolean isSymmetric() {
 
     for (Edge<T> edge : edges) {
@@ -93,6 +114,11 @@ public class Graph<T extends Comparable<T>> {
     return true;
   }
 
+  /**
+   * Determines if a graph is transitive or not.
+   *
+   * @return True if the graph is transitive, false otherwise.
+   */
   public boolean isTransitive() {
 
     // Find all B such that A->B - for each vertex A
@@ -115,6 +141,11 @@ public class Graph<T extends Comparable<T>> {
     return true;
   }
 
+  /**
+   * Determines if a graph is anti-symmetric or not.
+   *
+   * @return True if the graph is anti-symmetric, false otherwise.
+   */
   public boolean isAntiSymmetric() {
 
     // Graph is not antisymmetric if there is a symmetrical edge that is not a self loop
@@ -126,6 +157,11 @@ public class Graph<T extends Comparable<T>> {
     return true;
   }
 
+  /**
+   * Determines if a graph is an equivalence relation or not.
+   *
+   * @return True if the graph is an equivalence relation, false otherwise.
+   */
   public boolean isEquivalence() {
 
     // Graph is an equivalence relation if it is reflexive, symmetric and transitive
@@ -135,6 +171,12 @@ public class Graph<T extends Comparable<T>> {
     return false;
   }
 
+  /**
+   * Gets the equivalence class of a vertex.
+   *
+   * @param vertex The vertex to find the equivalence class of.
+   * @return The set of verticies in the equivalence class.
+   */
   public Set<T> getEquivalenceClass(T vertex) {
 
     Set<T> equivalenceClass = findDestinationVertices(vertex);
@@ -147,6 +189,11 @@ public class Graph<T extends Comparable<T>> {
     return equivalenceClass;
   }
 
+  /**
+   * Performs a breadth-first search iteratively on the graph.
+   *
+   * @return The list of verticies visited in order.
+   */
   public List<T> iterativeBreadthFirstSearch() {
 
     // Vertices visited
@@ -197,6 +244,11 @@ public class Graph<T extends Comparable<T>> {
     return verticiesVisited;
   }
 
+  /**
+   * Performs a depth-first search iteratively on the graph.
+   *
+   * @return The list of verticies visited in order.
+   */
   public List<T> iterativeDepthFirstSearch() {
 
     // Vertices visited
@@ -236,6 +288,11 @@ public class Graph<T extends Comparable<T>> {
     return verticiesVisited;
   }
 
+  /**
+   * Performs a breadth-first search recursively on the graph.
+   *
+   * @return The list of verticies visited in order.
+   */
   public List<T> recursiveBreadthFirstSearch() {
 
     // Vertices visited
@@ -260,6 +317,11 @@ public class Graph<T extends Comparable<T>> {
     return verticiesVisited;
   }
 
+  /**
+   * Performs a depth-first search recursively on the graph.
+   *
+   * @return The list of verticies visited in order.
+   */
   public List<T> recursiveDepthFirstSearch() {
     // Vertices visited
     List<T> verticiesVisited = new ArrayList<T>();
@@ -284,7 +346,15 @@ public class Graph<T extends Comparable<T>> {
     return verticiesVisited;
   }
 
-  // Helper method for recursive BFS call
+  /**
+   * Helper method that recursively does a breadth-first search.
+   *
+   * @param verticiesVisited The list of verticies visited in order.
+   * @param queue The queue of verticies to visit.
+   * @param verticiesToVisitIntegers The set of verticies to visit as integers for sorting.
+   * @param verticiesToVisit The set of verticies to visit as generic for retrieving original
+   *     instance.
+   */
   private void recursiveBreadthFirstSearchHelper(
       List<T> verticiesVisited,
       Queue<T> queue,
@@ -320,7 +390,12 @@ public class Graph<T extends Comparable<T>> {
         verticiesVisited, queue, verticiesToVisitIntegers, verticiesToVisit);
   }
 
-  // Helper method for recursive DFS call
+  /**
+   * Helper method that recursively does a depth-first search.
+   *
+   * @param verticiesVisited The list of verticies visited in order.
+   * @param stack The stack of verticies to visit.
+   */
   private void recursiveDepthFirstSearchHelper(List<T> verticiesVisited, Stack<T> stack) {
 
     // Base case
@@ -342,7 +417,13 @@ public class Graph<T extends Comparable<T>> {
     recursiveDepthFirstSearchHelper(verticiesVisited, stack);
   }
 
-  // Helper method for adding adjacent vertices to queue
+  /**
+   * Helper method for adding adjacent vertices to queue in order.
+   *
+   * @param vertex The vertex to find adjacent vertices of.
+   * @param queue The queue to add adjacent vertices to.
+   * @param verticiesVisited The list of verticies already visited.
+   */
   private void addAdjacentVerticesQueue(T vertex, Queue<T> queue, List<T> verticiesVisited) {
 
     // If vertex has no adjacent vertices return
@@ -378,7 +459,13 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
-  // Helper method for adding adajacent vertices to stack
+  /**
+   * Helper method for adding adjacent vertices to stack in reverse order.
+   *
+   * @param vertex The vertex to find adjacent vertices of.
+   * @param stack The stack to add adjacent vertices to.
+   * @param verticiesVisited The list of verticies already visited.
+   */
   private void addAdjacentVerticesStack(T vertex, Stack<T> stack, List<T> verticiesVisited) {
 
     // If vertex has no adjacent vertices return
@@ -413,7 +500,10 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
-  // Helper method to create adjacency map with vertice as key and sorted list of edges as value
+  /**
+   * Helper method to create adjacency map with verticies as keys and sorted linked-list of edges as
+   * values.
+   */
   private void createAdjacencyMap() {
 
     // Use each vertex as key for each adjacency list
@@ -476,7 +566,12 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
-  // Helper method to cast generic type to integer
+  /**
+   * Helper method to cast generic type to integer.
+   *
+   * @param data The data to cast.
+   * @return The data as an integer.
+   */
   private Integer castToInteger(T data) {
     if (data.getClass() == Integer.class) {
       return (Integer) data;
@@ -485,7 +580,12 @@ public class Graph<T extends Comparable<T>> {
     }
   }
 
-  // Helper method to check if a vertex is a root
+  /**
+   * Helper method to check if a vertex has in-degree 0.
+   *
+   * @param vertex The vertex to check.
+   * @return True if the vertex has in-degree 0, false otherwise.
+   */
   private boolean isRoot(T vertex) {
 
     // Check if vertice is a destination of any edge
@@ -498,7 +598,12 @@ public class Graph<T extends Comparable<T>> {
     return true;
   }
 
-  // Helper method to convert a set of generic type to a set of integers
+  /**
+   * Helper method to convert a set of generic type to a set of integers.
+   *
+   * @param set The set to convert.
+   * @return The set converted to integers.
+   */
   private Set<Integer> convertToIntegerSet(Set<T> set) {
     Set<Integer> integerSet = new HashSet<Integer>();
 
@@ -511,7 +616,12 @@ public class Graph<T extends Comparable<T>> {
     return integerSet;
   }
 
-  // Helper method to check if an edge has a symmetric edge - including self loop
+  /**
+   * Helper method to check if an edge has a symmetric edge - including self loop.
+   *
+   * @param edge The edge to check.
+   * @return True if the edge has a symmetric edge, false otherwise.
+   */
   private boolean isSymmetricEdge(Edge<T> edge) {
 
     // Check if there is an edge with the same source and destination but in the opposite direction
@@ -524,7 +634,12 @@ public class Graph<T extends Comparable<T>> {
     return false;
   }
 
-  // Helper method to find all vertices that a vertex has an edge to
+  /**
+   * Helper method to find all vertices that a vertex has an edge to.
+   *
+   * @param vertex The vertex to find adjacent vertices of.
+   * @return The set of adjacent vertices.
+   */
   private Set<T> findDestinationVertices(T vertex) {
     Set<T> adjacentVertices = new HashSet<T>();
     for (Edge<T> edge : edges) {
@@ -535,7 +650,11 @@ public class Graph<T extends Comparable<T>> {
     return adjacentVertices;
   }
 
-  // Helper method to find all equivalence classes
+  /**
+   * Helper method to find all equivalence classes.
+   *
+   * @return The set of all equivalence classes where each equivalence class is a set.
+   */
   private Set<Set<T>> getAllEquivalenceClasses() {
 
     // Create a new set of all verticies
@@ -554,7 +673,13 @@ public class Graph<T extends Comparable<T>> {
     return allEquivalenceClasses;
   }
 
-  // Helper method to return vertex from set
+  /**
+   * Helper method to return corresponding vertex from set of type generic.
+   *
+   * @param vertex The vertex to find as an Integer.
+   * @param verticies The set of verticies to search through as a generic set.
+   * @return The corresponding vertex as a generic type.
+   */
   private T getVertex(Integer vertex, Set<T> verticies) {
     // Loop through all verticies
     for (T v : verticies) {

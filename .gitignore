@@ -4,6 +4,7 @@
 target/
 codestyle.config
 test.txt
+test2.txt
 
 ### Eclipse ###
 .metadata

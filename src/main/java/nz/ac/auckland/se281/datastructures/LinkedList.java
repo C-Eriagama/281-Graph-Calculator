@@ -10,12 +10,18 @@ public class LinkedList<T> {
   private Node<T> head;
   private Node<T> tail;
 
+  /** Creates a new doubly LinkedList. */
   public LinkedList() {
     head = null;
     tail = null;
   }
 
-  // Add node at end of list
+  /**
+   * Adds a node one end of the list.
+   *
+   * @param data The data to add.
+   * @param end The end to add the data to.
+   */
   private void add(T data, End end) {
     Node<T> node = new Node<T>(data);
 
@@ -42,23 +48,48 @@ public class LinkedList<T> {
     }
   }
 
+  /**
+   * Get the head of the list.
+   *
+   * @return The head of the list.
+   */
   public Node<T> getHead() {
     return head;
   }
 
+  /**
+   * Get the tail of the list.
+   *
+   * @return The tail of the list.
+   */
   public Node<T> getTail() {
     return tail;
   }
 
+  /**
+   * Add node to end of list.
+   *
+   * @param data The data to add.
+   */
   public void append(T data) {
     add(data, End.APPEND);
   }
 
+  /**
+   * Add node to start of list.
+   *
+   * @param data The data to add.
+   */
   public void prepend(T data) {
     add(data, End.PREPEND);
   }
 
-  // Get Node at index
+  /**
+   * Get data at index.
+   *
+   * @param index The index of the node to get.
+   * @return The data of the node at the index.
+   */
   public T get(int index) {
     Node<T> node = head;
     for (int i = 0; i < index; i++) {
@@ -67,7 +98,12 @@ public class LinkedList<T> {
     return node.getData();
   }
 
-  // Insert node at index
+  /**
+   * Insert node at index.
+   *
+   * @param index The index node will be.
+   * @param data The data to insert.
+   */
   public void insert(int index, T data) {
 
     Node<T> node = locateNode(index);
@@ -92,7 +128,11 @@ public class LinkedList<T> {
     node.setPrevious(newNode);
   }
 
-  // Remove a node at index
+  /**
+   * Remove node at index.
+   *
+   * @param index The index of the node to remove.
+   */
   public void remove(int index) {
 
     Node<T> node = locateNode(index);
@@ -123,7 +163,12 @@ public class LinkedList<T> {
     node.getNext().setPrevious(node.getPrevious());
   }
 
-  // Find node at index
+  /**
+   * Find node at index.
+   *
+   * @param index The index of the node to find.
+   * @return The node at the index.
+   */
   private Node<T> locateNode(int index) {
     Node<T> node = head;
     for (int i = 0; i < index; i++) {
@@ -132,7 +177,11 @@ public class LinkedList<T> {
     return node;
   }
 
-  // Return size of list
+  /**
+   * Get the size of the list.
+   *
+   * @return The size of the list.
+   */
   public int size() {
 
     int size = 0;
@@ -158,7 +207,11 @@ public class LinkedList<T> {
     return size;
   }
 
-  // Check if list is empty
+  /**
+   * Check if list is empty.
+   *
+   * @return True if list is empty, false otherwise.
+   */
   public boolean isEmpty() {
     if (size() == 0) {
       return true;
@@ -166,7 +219,12 @@ public class LinkedList<T> {
     return false;
   }
 
-  // Find index of data
+  /**
+   * Find index of data.
+   *
+   * @param data The data to find.
+   * @return The index of the node with the data.
+   */
   public int indexOf(T data) {
     Node<T> node = head;
     int index = 0;
