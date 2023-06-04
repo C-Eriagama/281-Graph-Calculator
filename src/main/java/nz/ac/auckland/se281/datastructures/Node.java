@@ -1,6 +1,6 @@
 package nz.ac.auckland.se281.datastructures;
 
-/** A node for use in doubly linked-lists */
+/** A node for use in doubly linked-lists. */
 public class Node<T> {
 
   private T data;

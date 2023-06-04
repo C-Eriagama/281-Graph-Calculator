@@ -177,10 +177,9 @@ public class LinkedList<T> {
     // If removing head, update head and next node
     head = head.getNext();
     head.setPrevious(null);
-    return;
   }
 
-  /** Remove the current tail of linked-list and update new tail */
+  /** Remove the current tail of linked-list and update new tail. */
   public void removeTail() {
     // Removing only node
     if (head == tail) {
@@ -192,7 +191,6 @@ public class LinkedList<T> {
     // If removing Tail, update tail and previous node
     tail = tail.getPrevious();
     tail.setNext(null);
-    return;
   }
 
   /**

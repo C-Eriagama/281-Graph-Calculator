@@ -1,6 +1,6 @@
 package nz.ac.auckland.se281.datastructures;
 
-/** A last-in-first-out data structure using a linked-list known as a stack */
+/** A last-in-first-out data structure using a linked-list known as a stack. */
 public class Stack<T> {
   private LinkedList<T> stack;
 

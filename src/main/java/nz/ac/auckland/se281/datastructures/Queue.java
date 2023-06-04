@@ -1,6 +1,6 @@
 package nz.ac.auckland.se281.datastructures;
 
-/** A first-in-first-out data structure using a linked-list called queue */
+/** A first-in-first-out data structure using a linked-list called queue. */
 public class Queue<T> {
   private LinkedList<T> queue;
 
