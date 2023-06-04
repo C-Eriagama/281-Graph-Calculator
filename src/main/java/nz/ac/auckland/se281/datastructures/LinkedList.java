@@ -1,5 +1,6 @@
 package nz.ac.auckland.se281.datastructures;
 
+/** A doubly Linked-list. */
 public class LinkedList<T> {
 
   private enum End {
@@ -10,7 +11,7 @@ public class LinkedList<T> {
   private Node<T> head;
   private Node<T> tail;
 
-  /** Creates a new doubly LinkedList. */
+  /** Creates a new doubly Linked-list. */
   public LinkedList() {
     head = null;
     tail = null;
@@ -49,25 +50,25 @@ public class LinkedList<T> {
   }
 
   /**
-   * Get the head of the list.
+   * Get the head node of the list.
    *
-   * @return The head of the list.
+   * @return The head node of the list.
    */
   public Node<T> getHead() {
     return head;
   }
 
   /**
-   * Get the tail of the list.
+   * Get the tail node of the list.
    *
-   * @return The tail of the list.
+   * @return The tail node of the list.
    */
   public Node<T> getTail() {
     return tail;
   }
 
   /**
-   * Add node to end of list.
+   * Create node and add node to end of list.
    *
    * @param data The data to add.
    */
@@ -76,7 +77,7 @@ public class LinkedList<T> {
   }
 
   /**
-   * Add node to start of list.
+   * Create node and add node to start of list.
    *
    * @param data The data to add.
    */
@@ -85,7 +86,7 @@ public class LinkedList<T> {
   }
 
   /**
-   * Get data at index.
+   * Get the data from a node at the index.
    *
    * @param index The index of the node to get.
    * @return The data of the node at the index.
@@ -99,7 +100,7 @@ public class LinkedList<T> {
   }
 
   /**
-   * Insert node at index.
+   * Creates a new node and inserts node at index and update next and previous nodes.
    *
    * @param index The index node will be.
    * @param data The data to insert.
@@ -129,7 +130,7 @@ public class LinkedList<T> {
   }
 
   /**
-   * Remove node at index.
+   * Remove a node from linked-list at index and update next and previous nodes.
    *
    * @param index The index of the node to remove.
    */
@@ -163,8 +164,39 @@ public class LinkedList<T> {
     node.getNext().setPrevious(node.getPrevious());
   }
 
+  /** Remove the current head of linked-list and update new head. */
+  public void removeHead() {
+
+    // Removing only node
+    if (head == tail) {
+      head = null;
+      tail = null;
+      return;
+    }
+
+    // If removing head, update head and next node
+    head = head.getNext();
+    head.setPrevious(null);
+    return;
+  }
+
+  /** Remove the current tail of linked-list and update new tail */
+  public void removeTail() {
+    // Removing only node
+    if (head == tail) {
+      head = null;
+      tail = null;
+      return;
+    }
+
+    // If removing Tail, update tail and previous node
+    tail = tail.getPrevious();
+    tail.setNext(null);
+    return;
+  }
+
   /**
-   * Find node at index.
+   * Find the node at specified index of linked list.
    *
    * @param index The index of the node to find.
    * @return The node at the index.
@@ -178,7 +210,7 @@ public class LinkedList<T> {
   }
 
   /**
-   * Get the size of the list.
+   * Get the size of the linked-list.
    *
    * @return The size of the list.
    */
@@ -220,7 +252,7 @@ public class LinkedList<T> {
   }
 
   /**
-   * Find index of data.
+   * Find index of data by going through linked-list until a match is found.
    *
    * @param data The data to find.
    * @return The index of the node with the data.
@@ -239,28 +271,5 @@ public class LinkedList<T> {
     }
 
     return -1;
-  }
-
-  @Override
-  public String toString() {
-    String string;
-    StringBuilder sb = new StringBuilder();
-
-    // Add all nodes to string
-    Node<T> node = head;
-    while (node != null) {
-      sb.append(node.getData().toString() + ", ");
-      node = node.getNext();
-    }
-
-    // Remove last comma and space
-    int length = sb.length();
-    if (length > 2) {
-      sb.delete(length - 2, length);
-    }
-
-    // Add square brackets
-    string = "[" + sb.toString() + "]";
-    return string;
   }
 }

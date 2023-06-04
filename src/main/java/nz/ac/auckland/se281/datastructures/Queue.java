@@ -1,5 +1,6 @@
 package nz.ac.auckland.se281.datastructures;
 
+/** A first-in-first-out data structure using a linked-list called queue */
 public class Queue<T> {
   private LinkedList<T> queue;
 
@@ -24,7 +25,7 @@ public class Queue<T> {
    */
   public T dequeue() {
     T data = queue.getHead().getData();
-    queue.remove(0);
+    queue.removeHead();
     return data;
   }
 
@@ -64,10 +65,5 @@ public class Queue<T> {
   public boolean contains(T data) {
     int index = queue.indexOf(data);
     return index != -1;
-  }
-
-  @Override
-  public String toString() {
-    return queue.toString();
   }
 }

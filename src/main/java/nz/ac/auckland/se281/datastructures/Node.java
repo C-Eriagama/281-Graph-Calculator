@@ -1,5 +1,6 @@
 package nz.ac.auckland.se281.datastructures;
 
+/** A node for use in doubly linked-lists */
 public class Node<T> {
 
   private T data;
@@ -69,10 +70,5 @@ public class Node<T> {
    */
   public void setPrevious(Node<T> previous) {
     this.previous = previous;
-  }
-
-  @Override
-  public String toString() {
-    return data.toString();
   }
 }

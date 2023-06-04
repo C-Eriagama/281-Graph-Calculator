@@ -1,5 +1,6 @@
 package nz.ac.auckland.se281.datastructures;
 
+/** A last-in-first-out data structure using a linked-list known as a stack */
 public class Stack<T> {
   private LinkedList<T> stack;
 
@@ -24,7 +25,7 @@ public class Stack<T> {
    */
   public T pop() {
     T data = stack.getTail().getData();
-    stack.remove(stack.size() - 1);
+    stack.removeTail();
     return data;
   }
 
@@ -64,10 +65,5 @@ public class Stack<T> {
   public boolean contains(T data) {
     int index = stack.indexOf(data);
     return index != -1;
-  }
-
-  @Override
-  public String toString() {
-    return stack.toString();
   }
 }
