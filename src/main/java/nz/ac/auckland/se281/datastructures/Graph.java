@@ -254,19 +254,8 @@ public class Graph<T extends Comparable<T>> {
     // Vertices visited
     List<T> verticiesVisited = new ArrayList<T>();
 
-    // Vertices to visit
-    Set<T> verticiesToVisit = new HashSet<T>();
-    verticiesToVisit.addAll(roots);
-    Set<Integer> verticiesToVisitIntegers = convertToIntegerSet(verticiesToVisit);
-
     // Add all roots to stack in reverse order
-    Stack<T> stack = new Stack<T>();
-    for (int i = 0; i < verticiesToVisit.size(); i++) {
-      Integer max = Collections.max(verticiesToVisitIntegers);
-      T maximum = getVertex(max, verticiesToVisit);
-      stack.push(maximum);
-      verticiesToVisitIntegers.remove(Collections.max(verticiesToVisitIntegers));
-    }
+    Stack<T> stack = addRootsReverseOrder();
 
     // Go through stack
     while (!stack.isEmpty()) {
@@ -326,19 +315,8 @@ public class Graph<T extends Comparable<T>> {
     // Vertices visited
     List<T> verticiesVisited = new ArrayList<T>();
 
-    // Vertices to visit
-    Set<T> verticiesToVisit = new HashSet<T>();
-    verticiesToVisit.addAll(roots);
-    Set<Integer> verticiesToVisitIntegers = convertToIntegerSet(verticiesToVisit);
-
     // Add all roots to stack in reverse order
-    Stack<T> stack = new Stack<T>();
-    for (int i = 0; i < verticiesToVisit.size(); i++) {
-      Integer max = Collections.max(verticiesToVisitIntegers);
-      T maximum = getVertex(max, verticiesToVisit);
-      stack.push(maximum);
-      verticiesToVisitIntegers.remove(Collections.max(verticiesToVisitIntegers));
-    }
+    Stack<T> stack = addRootsReverseOrder();
 
     // Go through stack recursively
     recursiveDepthFirstSearchHelper(verticiesVisited, stack);
@@ -415,6 +393,29 @@ public class Graph<T extends Comparable<T>> {
     }
     // Go through stack recursively
     recursiveDepthFirstSearchHelper(verticiesVisited, stack);
+  }
+
+  /**
+   * Helper method for creating stack and adding roots to stack in reverse order.
+   *
+   * @return The stack of roots in reverse order.
+   */
+  private Stack<T> addRootsReverseOrder() {
+
+    // Vertices to visit starting with roots
+    Set<T> verticiesToVisit = new HashSet<T>();
+    verticiesToVisit.addAll(roots);
+    Set<Integer> verticiesToVisitIntegers = convertToIntegerSet(verticiesToVisit);
+
+    // Add all roots to stack in reverse order
+    Stack<T> stack = new Stack<T>();
+    for (int i = 0; i < verticiesToVisit.size(); i++) {
+      Integer max = Collections.max(verticiesToVisitIntegers);
+      T maximum = getVertex(max, verticiesToVisit);
+      stack.push(maximum);
+      verticiesToVisitIntegers.remove(Collections.max(verticiesToVisitIntegers));
+    }
+    return stack;
   }
 
   /**
