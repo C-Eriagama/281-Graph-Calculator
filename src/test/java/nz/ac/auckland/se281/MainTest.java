@@ -12,7 +12,7 @@ import org.junit.runners.Suite.SuiteClasses;
   MainTest.Task1.class,
   MainTest.Task2.class, // Uncomment this line when you start Task 2
   MainTest.Task3.class, // Uncomment this line when you start Task 3
-  // MainTest.YourTests.class, // Uncomment this line to run your own tests
+  MainTest.YourTests.class, // Uncomment this line to run your own tests
 })
 public class MainTest {
   public static class Task1 extends CliTest {
@@ -270,11 +270,67 @@ public class MainTest {
     }
 
     @Test
-    public void TY_01_your_own_test() throws Exception {
+    public void Test_01_your_own_test() throws Exception {
       // Write your own test here, in the same format as the other tests.
-      runCommands(OPEN_FILE, "test.txt", GRAPH_SEARCH_IBFS, GRAPH_SEARCH_IDFS);
-      assertContains("Successfully opened graph from file c.txt");
-      assertContains("[0, 1, 2, 3]");
+      runCommands(OPEN_FILE, "test.txt", GRAPH_SEARCH_IBFS);
+      assertContains("Successfully opened graph from file test.txt");
+      assertContains("[0, 1, 2, 3, 4, 5, 6, 9, 10, 13, 7, 8, 15, 11, 20, 23, 12, 21, 22]");
+    }
+
+    @Test
+    public void Test_02_your_own_test() throws Exception {
+      // Write your own test here, in the same format as the other tests.
+      runCommands(OPEN_FILE, "test.txt", GRAPH_SEARCH_IDFS);
+      assertContains("Successfully opened graph from file test.txt");
+      assertContains("[0, 1, 5, 7, 15, 23, 21, 22, 20, 8, 6, 2, 9, 3, 4, 10, 11, 12, 13]");
+    }
+
+    @Test
+    public void Test_03_your_own_test() throws Exception {
+      // Write your own test here, in the same format as the other tests.
+      runCommands(OPEN_FILE, "test.txt", GRAPH_SEARCH_RBFS);
+      assertContains("Successfully opened graph from file test.txt");
+      assertContains("[0, 1, 2, 3, 4, 5, 6, 9, 10, 13, 7, 8, 15, 11, 20, 23, 12, 21, 22]");
+    }
+
+    @Test
+    public void Test_04_your_own_test() throws Exception {
+      // Write your own test here, in the same format as the other tests.
+      runCommands(OPEN_FILE, "test.txt", GRAPH_SEARCH_RDFS);
+      assertContains("Successfully opened graph from file test.txt");
+      assertContains("[0, 1, 5, 7, 15, 23, 21, 22, 20, 8, 6, 2, 9, 3, 4, 10, 11, 12, 13]");
+    }
+
+    @Test
+    public void Test2_01_your_own_test() throws Exception {
+      // Write your own test here, in the same format as the other tests.
+      runCommands(OPEN_FILE, "test2.txt", GRAPH_SEARCH_IBFS);
+      assertContains("Successfully opened graph from file test2.txt");
+      assertContains("[0, 15, 21, 2, 8, 9, 23, 5, 6, 10, 24, 25]");
+    }
+
+    @Test
+    public void Test2_02_your_own_test() throws Exception {
+      // Write your own test here, in the same format as the other tests.
+      runCommands(OPEN_FILE, "test2.txt", GRAPH_SEARCH_IDFS);
+      assertContains("Successfully opened graph from file test2.txt");
+      assertContains("[0, 15, 21, 2, 8, 9, 23, 5, 6, 10, 24, 25]");
+    }
+
+    @Test
+    public void Test2_03_your_own_test() throws Exception {
+      // Write your own test here, in the same format as the other tests.
+      runCommands(OPEN_FILE, "test2.txt", GRAPH_SEARCH_RBFS);
+      assertContains("Successfully opened graph from file test2.txt");
+      assertContains("[0, 15, 21, 2, 8, 9, 23, 5, 6, 10, 24, 25]");
+    }
+
+    @Test
+    public void Test2_04_your_own_test() throws Exception {
+      // Write your own test here, in the same format as the other tests.
+      runCommands(OPEN_FILE, "test2.txt", GRAPH_SEARCH_RDFS);
+      assertContains("Successfully opened graph from file test2.txt");
+      assertContains("[0, 15, 21, 2, 8, 9, 23, 5, 6, 10, 24, 25]");
     }
   }
 }
