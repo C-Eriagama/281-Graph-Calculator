@@ -206,10 +206,7 @@ public class Graph<T extends Comparable<T>> {
 
     // Add smallest root to queue
     Queue<T> queue = new Queue<T>();
-    Integer min = Collections.min(verticiesToVisitIntegers);
-    T minimum = getVertex(min, verticiesToVisit);
-    queue.enqueue(minimum);
-    verticiesToVisitIntegers.remove(Collections.min(verticiesToVisitIntegers));
+    addRootQueue(verticiesToVisit, verticiesToVisitIntegers, queue);
 
     // Go through queue
     while (!queue.isEmpty()) {
@@ -219,6 +216,7 @@ public class Graph<T extends Comparable<T>> {
       // If vertex has no adjacent vertices, remove from queue and continue
       if (adjacencyMap.get(vertex).isEmpty()) {
         queue.dequeue();
+        addRootQueue(verticiesToVisit, verticiesToVisitIntegers, queue);
         continue;
       }
 
@@ -228,18 +226,8 @@ public class Graph<T extends Comparable<T>> {
       // Remove vertex from queue
       queue.dequeue();
 
-      // If all roots have been visited, skip adding root
-      if (verticiesToVisitIntegers.isEmpty()) {
-        continue;
-      }
-
       // Go to next root if queue is empty
-      if (queue.isEmpty()) {
-        Integer min2 = Collections.min(verticiesToVisitIntegers);
-        T minimum2 = getVertex(min2, verticiesToVisit);
-        queue.enqueue(minimum2);
-        verticiesToVisitIntegers.remove(min2);
-      }
+      addRootQueue(verticiesToVisit, verticiesToVisitIntegers, queue);
     }
     return verticiesVisited;
   }
@@ -255,7 +243,7 @@ public class Graph<T extends Comparable<T>> {
     List<T> verticiesVisited = new ArrayList<T>();
 
     // Add all roots to stack in reverse order
-    Stack<T> stack = addRootsReverseOrder();
+    Stack<T> stack = addRootsReverseOrderStack();
 
     // Go through stack
     while (!stack.isEmpty()) {
@@ -294,10 +282,7 @@ public class Graph<T extends Comparable<T>> {
 
     // Add smallest root to queue
     Queue<T> queue = new Queue<T>();
-    Integer min = Collections.min(verticiesToVisitIntegers);
-    T minimum = getVertex(min, verticiesToVisit);
-    queue.enqueue(minimum);
-    verticiesToVisitIntegers.remove(Collections.min(verticiesToVisitIntegers));
+    addRootQueue(verticiesToVisit, verticiesToVisitIntegers, queue);
 
     // Go through queue recursively
     recursiveBreadthFirstSearchHelper(
@@ -316,7 +301,7 @@ public class Graph<T extends Comparable<T>> {
     List<T> verticiesVisited = new ArrayList<T>();
 
     // Add all roots to stack in reverse order
-    Stack<T> stack = addRootsReverseOrder();
+    Stack<T> stack = addRootsReverseOrderStack();
 
     // Go through stack recursively
     recursiveDepthFirstSearchHelper(verticiesVisited, stack);
@@ -354,15 +339,8 @@ public class Graph<T extends Comparable<T>> {
     // Remove vertex from queue
     queue.dequeue();
 
-    // Go to next root if queue is empty
-    if (queue.isEmpty()) {
-      if (!verticiesToVisitIntegers.isEmpty()) {
-        Integer min2 = Collections.min(verticiesToVisitIntegers);
-        T minimum2 = getVertex(min2, verticiesToVisit);
-        queue.enqueue(minimum2);
-        verticiesToVisitIntegers.remove(min2);
-      }
-    }
+    // Add next root to queue if queue is empty
+    addRootQueue(verticiesToVisit, verticiesToVisitIntegers, queue);
 
     recursiveBreadthFirstSearchHelper(
         verticiesVisited, queue, verticiesToVisitIntegers, verticiesToVisit);
@@ -400,7 +378,7 @@ public class Graph<T extends Comparable<T>> {
    *
    * @return The stack of roots in reverse order.
    */
-  private Stack<T> addRootsReverseOrder() {
+  private Stack<T> addRootsReverseOrderStack() {
 
     // Vertices to visit starting with roots
     Set<T> verticiesToVisit = new HashSet<T>();
@@ -413,9 +391,27 @@ public class Graph<T extends Comparable<T>> {
       Integer max = Collections.max(verticiesToVisitIntegers);
       T maximum = getVertex(max, verticiesToVisit);
       stack.push(maximum);
-      verticiesToVisitIntegers.remove(Collections.max(verticiesToVisitIntegers));
+      verticiesToVisitIntegers.remove(max);
     }
     return stack;
+  }
+
+  /** Helper method for adding roots to queue in order. */
+  private void addRootQueue(
+      Set<T> verticiesToVisit, Set<Integer> verticiesToVisitIntegers, Queue<T> queue) {
+
+    // Go to next smallest root if queue is empty
+    if (queue.isEmpty()) {
+      if (!verticiesToVisitIntegers.isEmpty()) {
+        Integer min = Collections.min(verticiesToVisitIntegers);
+        T minimum = getVertex(min, verticiesToVisit);
+        queue.enqueue(minimum);
+        verticiesToVisitIntegers.remove(min);
+        verticiesToVisit.remove(minimum);
+      }
+    }
+
+    return;
   }
 
   /**

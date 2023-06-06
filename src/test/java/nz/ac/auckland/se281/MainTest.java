@@ -332,5 +332,37 @@ public class MainTest {
       assertContains("Successfully opened graph from file test2.txt");
       assertContains("[0, 15, 21, 2, 8, 9, 23, 5, 6, 10, 24, 25]");
     }
+
+    @Test
+    public void Test3_01_your_own_test() throws Exception {
+      // Write your own test here, in the same format as the other tests.
+      runCommands(OPEN_FILE, "test3.txt", GRAPH_SEARCH_IBFS);
+      assertContains("Successfully opened graph from file test3.txt");
+      assertContains("[0, 1, 2, 3]");
+    }
+
+    @Test
+    public void Test3_02_your_own_test() throws Exception {
+      // Write your own test here, in the same format as the other tests.
+      runCommands(OPEN_FILE, "test3.txt", GRAPH_SEARCH_IDFS);
+      assertContains("Successfully opened graph from file test3.txt");
+      assertContains("[0, 1, 2, 3]");
+    }
+
+    @Test
+    public void Test3_03_your_own_test() throws Exception {
+      // Write your own test here, in the same format as the other tests.
+      runCommands(OPEN_FILE, "test3.txt", GRAPH_SEARCH_RBFS);
+      assertContains("Successfully opened graph from file test3.txt");
+      assertContains("[0, 1, 2, 3]");
+    }
+
+    @Test
+    public void Test3_04_your_own_test() throws Exception {
+      // Write your own test here, in the same format as the other tests.
+      runCommands(OPEN_FILE, "test3.txt", GRAPH_SEARCH_RDFS);
+      assertContains("Successfully opened graph from file test3.txt");
+      assertContains("[0, 1, 2, 3]");
+    }
   }
 }
