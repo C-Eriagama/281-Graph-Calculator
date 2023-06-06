@@ -396,7 +396,13 @@ public class Graph<T extends Comparable<T>> {
     return stack;
   }
 
-  /** Helper method for adding roots to queue in order. */
+  /**
+   * Helper method for adding roots to queue in order.
+   *
+   * @param verticiesToVisit The set of verticies to visit.
+   * @param verticiesToVisitIntegers The set of verticies to visit as integers for sorting.
+   * @param queue The queue to add roots to.
+   */
   private void addRootQueue(
       Set<T> verticiesToVisit, Set<Integer> verticiesToVisitIntegers, Queue<T> queue) {
 
@@ -410,8 +416,6 @@ public class Graph<T extends Comparable<T>> {
         verticiesToVisit.remove(minimum);
       }
     }
-
-    return;
   }
 
   /**
@@ -487,7 +491,7 @@ public class Graph<T extends Comparable<T>> {
         continue;
       }
 
-      // Add destination to queue
+      // Add destination to stack
       stack.push(node.getData().getDestination());
 
       // Iterate if first
@@ -678,6 +682,7 @@ public class Graph<T extends Comparable<T>> {
    * @return The corresponding vertex as a generic type.
    */
   private T getVertex(Integer vertex, Set<T> verticies) {
+
     // Loop through all verticies
     for (T v : verticies) {
       Integer v1 = castToInteger(v);
